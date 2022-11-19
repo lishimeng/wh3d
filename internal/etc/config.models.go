@@ -10,6 +10,10 @@ type web struct {
 }
 
 type mq struct {
-	Conn      string `toml:"conn"`
-	Subscribe string `toml:"subscribe"`
+	Conn      string    `toml:"conn"`
+	Subscribe subscribe `toml:"subscribe"`
+}
+
+type subscribe struct {
+	WhEvent string `toml:"whEvent"`
 }

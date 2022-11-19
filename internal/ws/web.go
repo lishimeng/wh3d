@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/lishimeng/go-log"
@@ -11,8 +12,17 @@ import (
 )
 
 func subscribe(w http.ResponseWriter, r *http.Request) {
+
 	var id = fmt.Sprintf("c%d", time.Now().Nanosecond())
-	var roomName = "" // TODO
+	var roomName = "" // 每个组织一个Room
+	q := r.URL.Query()
+	if values, ok := q["id"]; ok {
+		roomName = values[0] // 此处是区分每个组织
+	} else {
+		log.Info("unknown room")
+		return
+	}
+
 	if !websocket.IsWebSocketUpgrade(r) {
 		return
 	}
@@ -41,10 +51,14 @@ func subscribe(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Web() {
-	log.Info("app start")
-	mux := http.NewServeMux()
-	mux.HandleFunc("/subscribe", subscribe)
-	mux.Handle("/", http.FileServer(http.FS(static.Static)))
-	log.Info(http.ListenAndServe(etc.Config.Web.Listen, mux))
+func Web(_ context.Context) (err error) {
+	go func() {
+		log.Info("websocket start")
+		mux := http.NewServeMux()
+		mux.HandleFunc("/subscribe", subscribe)
+		mux.Handle("/", http.FileServer(http.FS(static.Static)))
+		log.Info(http.ListenAndServe(etc.Config.Web.Listen, mux))
+	}()
+
+	return
 }

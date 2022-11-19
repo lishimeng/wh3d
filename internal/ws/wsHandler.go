@@ -23,6 +23,11 @@ func leaveRoom(roomName, id string) {
 	log.Info("leave from room:%s[%s]", id, roomName)
 	if r, ok := room[roomName]; ok {
 		delete(r, id)
+		if len(r) <= 0 {
+			// 释放房间
+			log.Info("release room: %s", roomName)
+			delete(room, roomName)
+		}
 	}
 }
 
@@ -48,7 +53,7 @@ func Broadcast(roomName string, payload string) {
 			broadcastToClient(roomName, id, payload, conn)
 		}
 	} else {
-		log.Info("unknown room: %s", roomName)
+		log.Info("no subscriber in room:%s", roomName)
 	}
 }
 

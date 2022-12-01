@@ -1,0 +1,15 @@
+[web]
+listen = ":80"
+
+[mq]
+conn = "amqp://user:pass@192.168.1.1:5672/"
+[mq.subscribe]
+whEvent  = "wh_events"
+
+[db]
+user = "postgres"
+password = "postgres"
+host = "127.0.0.1"
+port = 5432
+database = "postgres"
+ssl = "disable" #require/verify-full/verify-ca/disable

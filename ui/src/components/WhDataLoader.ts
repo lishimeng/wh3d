@@ -42,20 +42,20 @@ const LoadData = async (sb: WhStoryBoard) => {
     setInterval(() => {
         // TODO 更新每个area的托盘变动，或启动websocket监听托盘变动
         // 连接 WebSocket service
-        const url = genWsUrl()
-        let ws = SocketService.Instance
-        ws.url = url
+        // const url = genWsUrl()
+        // let ws = SocketService.Instance
+        // ws.url = url
 
-        ws.onmessage = (msg) => {
-            if (msg == undefined || msg.data == undefined) {
-                return
-            }
-            console.log(msg)
-            let d = JSON.parse(msg.data)
-            console.log(d)
-        }
+        // ws.onmessage = (msg) => {
+        //     if (msg == undefined || msg.data == undefined) {
+        //         return
+        //     }
+        //     console.log(msg)
+        //     let d = JSON.parse(msg.data)
+        //     console.log(d)
+        // }
 
-        ws.connect()
+        // ws.connect()
     }, 1000)
     setInterval(() => {
         // TODO 更新每个站台状态变动

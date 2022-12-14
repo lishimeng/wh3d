@@ -3,7 +3,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json'
 export const baseURL = 'main'
 // 配置新建一个 axios 实例
 const service = axios.create({
-	baseURL: '' as any,
+	baseURL: '../',
 	timeout: 50000,
 	headers: { 'Content-Type': 'application/json' },
 });

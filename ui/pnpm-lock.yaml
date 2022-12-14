@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/dat.gui': ^0.7.7
+  '@types/node': ^16.11.6
   '@types/three': ^0.144.0
   '@vitejs/plugin-vue': ^3.1.0
   axios: ^0.24.0
@@ -13,6 +14,7 @@ specifiers:
   vue-tsc: ^0.40.4
 
 dependencies:
+  '@types/node': registry.npmmirror.com/@types/node/16.18.8
   axios: registry.npmmirror.com/axios/0.24.0
   dat.gui: 0.7.9
   three: 0.144.0
@@ -406,6 +408,12 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  registry.npmmirror.com/@types/node/16.18.8:
+    resolution: {integrity: sha512-TrpoNiaPvBH5h8rQQenMtVsJXtGsVBRJrcp2Ik6oEt99jHfGvDLh20VTTq3ixTbjYujukYz1IlY4N8a8yfY0jA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-16.18.8.tgz}
+    name: '@types/node'
+    version: 16.18.8
+    dev: false
 
   registry.npmmirror.com/axios/0.24.0:
     resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/axios/-/axios-0.24.0.tgz}

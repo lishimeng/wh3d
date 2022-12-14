@@ -1,9 +1,18 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+// import { resolve } from 'path';
+
+// const pathResolve = (dir: string): any => {
+// 	return resolve(__dirname, '.', dir);
+// };
+// const alias: Record<string, string> = {
+// 	'/@': pathResolve('./src/'),
+// };
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+	base: "./",
   server: {
 		host: '0.0.0.0',
 		port: 5173,
@@ -17,5 +26,12 @@ export default defineConfig({
 				rewrite: (path) => path.replace(/^\/main/, '/api'), // 本地环境
 			}
 		}
-  }
+  },
+	build: {
+		outDir: 'dist',
+		minify: 'esbuild',
+		sourcemap: false,
+		chunkSizeWarningLimit: 1500,
+		assetsDir: './'
+	},
 })

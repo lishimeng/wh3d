@@ -11,7 +11,9 @@
   "dependencies": {
     "vue": "^3.2.37",
     "three": "^0.144.0",
-    "dat.gui": "^0.7.9"
+    "dat.gui": "^0.7.9",
+    "axios": "^0.24.0",
+    "@types/node": "^16.11.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.0",

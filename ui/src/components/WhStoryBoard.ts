@@ -129,6 +129,18 @@ export default class WhStoryBoard extends StoryBoard {
 
     loadContainer(c: ContainerInfo) {
         let container = new Container()
+        let p = c.tileRelative
+        switch (p.y) {
+            case 0: // 一层
+                container.setMaterial(Resources.Goods0)
+                break
+            case 1: // 二层
+                container.setMaterial(Resources.Goods1)
+                break
+            case 2: // 三层
+                container.setMaterial(Resources.Goods2)
+                break
+        }
         let mesh = container.mesh
 
         mesh.position.set(c.pos.x, c.pos.y, c.pos.z)

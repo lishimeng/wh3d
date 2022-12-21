@@ -68,9 +68,28 @@ class Materials {
         // let goodsUrl = "./images/box.png"
         let goodsUrl = "./images/crate.gif"
 
+        let goods0Url = "./images/container/crate1.png"
+        let goods1Url = "./images/container/crate2.png"
+        let goods2Url = "./images/container/crate3.png"
+
         DefaultLoader.loadTexture(Resources.Goods, goodsUrl, (texture) => {
             let goodsMat = new MeshBasicMaterial({ map: texture })
             this.map.set(Resources.Goods, goodsMat)
+        })
+
+        DefaultLoader.loadTexture(Resources.Goods0, goods0Url, (texture) => {
+            let goodsMat = new MeshBasicMaterial({ map: texture })
+            this.map.set(Resources.Goods0, goodsMat)
+        })
+
+        DefaultLoader.loadTexture(Resources.Goods1, goods1Url, (texture) => {
+            let goodsMat = new MeshBasicMaterial({ map: texture })
+            this.map.set(Resources.Goods1, goodsMat)
+        })
+
+        DefaultLoader.loadTexture(Resources.Goods2, goods2Url, (texture) => {
+            let goodsMat = new MeshBasicMaterial({ map: texture })
+            this.map.set(Resources.Goods2, goodsMat)
         })
 
 

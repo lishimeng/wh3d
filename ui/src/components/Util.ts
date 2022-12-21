@@ -1,6 +1,6 @@
 
 const Percent = (cur: number, total: number) => {
-    console.log(cur + '/' + total)
+    console.log('percent:' + cur + '/' + total)
     if (cur > total) {
         cur = total
     }

@@ -30,6 +30,7 @@ const init = () => {
 }
 
 const initWorld =() => {
+  
   let w = new WorldImpl(root.value!)
   w.start()
 
@@ -78,7 +79,7 @@ onMounted(() => {
 
 <style scoped>
 .w{
-width: 1024px;
-height: 768px;
+width: 1600px;
+height: 900px;
 }
 </style>

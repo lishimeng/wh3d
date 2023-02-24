@@ -27,18 +27,27 @@ export class WorldImpl implements World {
     mapControl!: MapControls
 
     hemiHelper!: HemisphereLightHelper
-    root: HTMLElement
     stats: Stats
+
+    posList = new Array<Vector3>()
 
     gridHelper!: GridHelper
 
-    constructor(root: HTMLElement) {
-        this.root = root
+    constructor() {
         this.stats = Stats()
-        this.root.appendChild(this.stats.domElement)
+        document.body.appendChild(this.stats.domElement)
     }
 
     init(): void {
+
+        this.posList.push(
+            new Vector3(0, 200, 0), 
+            new Vector3(100, 200, 0), 
+            new Vector3(0, 100, 100),
+            new Vector3(-100, 200, 0),
+            new Vector3(50, 25, 0),
+            new Vector3(0, 100, -100)
+            )
 
         this.initScene()
         this.initCamera()
@@ -48,12 +57,22 @@ export class WorldImpl implements World {
         this.initControls()
         this.initGui()
         document.addEventListener('resize', this.onWindowResize, false)
+        let i = 0;
+        setInterval(() => {
+            i = (i + 1) % this.posList.length
+            if (Config.Camare.Control) {
+
+                let p = this.posList[i]
+                Config.Camare.NormalPos.set(p.x, p.y, p.z)
+                this.moveCamera()
+            }
+        }, 5000)
     }
 
     onWindowResize(): void {
-        this.camera.aspect = this.root.clientWidth, this.root.clientHeight
-        this.camera.updateProjectionMatrix()
-        this.renderer.setSize(this.root.clientWidth, this.root.clientHeight)
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
     }
 
     initScene() {
@@ -94,7 +113,7 @@ export class WorldImpl implements World {
     initCamera(): void {
         this.camera = new PerspectiveCamera(
             75,
-            this.root.clientWidth / this.root.clientHeight,
+            window.innerWidth / window.innerHeight,
             0.1,
             Config.Camare.Far
         )
@@ -103,15 +122,20 @@ export class WorldImpl implements World {
         this.cameraHelper.layers.set(Layers.Helper)
         this.scene.add(this.cameraHelper)
         Config.Camare.NormalPos.set(0, 200, 0)
-        this.camera.position.set(Config.Camare.NormalPos.x, Config.Camare.NormalPos.y, Config.Camare.NormalPos.z)
+        this.moveCamera()
         this.camera.lookAt(0, 0, 0)
+    }
+
+    moveCamera(): void {
+        this.camera.position.copy(Config.Camare.NormalPos)
+        this.camera.updateMatrixWorld()
     }
 
     initRender(): void {
         this.renderer = new WebGLRenderer({ antialias: true })
         this.renderer.setClearColor(new Color(0xeeeeee))
-        this.renderer.setSize(this.root.clientWidth, this.root.clientHeight)
-        this.root.appendChild(this.renderer.domElement);
+        this.renderer.setSize(window.innerWidth, window.innerHeight)
+        document.body.appendChild(this.renderer.domElement);
     }
 
     initControls(): void {
@@ -150,6 +174,10 @@ export class WorldImpl implements World {
         let cf = gui.addFolder('Camera')
         
         cf.add(Config.Camare, 'Control')
+        // cf.add(() => {
+        //     Config.Camare.NormalPos.copy(new Vector3(0, 200, 0))
+        //     this.moveCamera()
+        // }, "reset")
         
         cf.open()
 

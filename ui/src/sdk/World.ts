@@ -1,5 +1,5 @@
 import { GUI } from "dat.gui"
-import { Scene, PerspectiveCamera, Mesh, AmbientLight, AxesHelper, WebGLRenderer, Color, HemisphereLight, HemisphereLightHelper, GridHelper, CameraHelper } from "three"
+import { Scene, PerspectiveCamera, Mesh, AmbientLight, AxesHelper, WebGLRenderer, Color, HemisphereLight, HemisphereLightHelper, GridHelper, CameraHelper, Vector3 } from "three"
 
 import { MapControls, OrbitControls } from "three/examples/jsm/controls/OrbitControls" 
 
@@ -22,7 +22,7 @@ export class WorldImpl implements World {
     camera!: PerspectiveCamera
     cameraHelper!: CameraHelper
     renderer!: WebGLRenderer
-    controls!: OrbitControls
+    orbitControl!: OrbitControls
 
     mapControl!: MapControls
 
@@ -115,32 +115,32 @@ export class WorldImpl implements World {
     }
 
     initControls(): void {
-        // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        // this.controls.enableDamping = true;
-        // this.controls.dampingFactor = 0.5;
-        // // 视角最小距离
-        // this.controls.minDistance = 10;
-        // // 视角最远距离
-        // this.controls.maxDistance = 50000;
-        // // 最大角度
-        // this.controls.maxPolarAngle = Math.PI / 2.2;
+        this.orbitControl = new OrbitControls(this.camera, this.renderer.domElement);
+        //this.orbitControl.enableDamping = true;
+        //this.orbitControl.dampingFactor = 0.5;
+        // 视角最小距离
+        this.orbitControl.minDistance = 10;
+        // 视角最远距离
+        this.orbitControl.maxDistance = 50000;
+        // 最大角度
+        this.orbitControl.maxPolarAngle = Math.PI / 2.2;
 
-        // this.controls.autoRotate = true
+        this.orbitControl.autoRotate = true
 
-        // this.controls.target = new Vector3(0, 0, 0)
+        this.orbitControl.target = new Vector3(0, 0, 0)
 
 
-        this.mapControl = new MapControls(this.camera, this.renderer.domElement)
+        // this.mapControl = new MapControls(this.camera, this.renderer.domElement)
 
-        this.mapControl.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-        this.mapControl.dampingFactor = 0.05;
+        // // this.mapControl.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+        // this.mapControl.dampingFactor = 0.05;
 
-        this.mapControl.screenSpacePanning = false;
+        // this.mapControl.screenSpacePanning = false;
 
-        this.mapControl.minDistance = 100;
-        this.mapControl.maxDistance = 500;
+        // this.mapControl.minDistance = 100;
+        // this.mapControl.maxDistance = 500;
 
-        this.mapControl.maxPolarAngle = Math.PI / 2;
+        // this.mapControl.maxPolarAngle = Math.PI / 2;
     }
 
     initGui():void {
@@ -176,9 +176,9 @@ export class WorldImpl implements World {
             this.animate()
         })
         if (Config.Camare.Control) {
-            this.controls?.update()
+            this.orbitControl?.update()
         }
-        this.mapControl?.update()
+        // this.mapControl?.update()
 
         if (Config.Layer.Environment) {
             this.camera.layers.enable(Layers.Environment)

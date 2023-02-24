@@ -25,8 +25,8 @@ class Materials {
 
     init(): void {
 
-        console.log('加载字体')
-        DefaultLoader.loadFont(Resources.TTFKenpixel, './fonts/FZYaoTi_Regular.json')
+        // console.log('加载字体')
+        // DefaultLoader.loadFont(Resources.TTFKenpixel, './fonts/FZYaoTi_Regular.json')
 
 
         console.log('加载地面')

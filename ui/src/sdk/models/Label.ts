@@ -13,6 +13,7 @@ export class Label extends CubeImpl {
 
     constructor(name: string, size: number) {
         let font = DefaultLoader.getFont(Resources.TTFKenpixel)
+        
         let geo = new TextGeometry(name, {
             font: font,
             size: size,

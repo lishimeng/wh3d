@@ -169,24 +169,6 @@ export default class WhStoryBoard extends StoryBoard {
     }
 
     loadOthers() {
-        let slogen = OtherConfig.slogen
-        if (slogen != "") {
-            let lab = new Label(slogen, 6)
-            let mesh = lab.mesh
-            mesh.position.set(-40, 1, 30)
-        
-            mesh.rotation.x = -Math.PI / 2.0
-    
-            this.add(mesh)
-        }
-        let logo = OtherConfig.logo
-        let logoLabel = new Label(logo, 6)
-        let logoMesh = logoLabel.mesh
-        logoMesh.position.set(-10, 1, 10)
-    
-        logoMesh.rotation.x = -Math.PI / 2.0
-
-        this.add(logoMesh)
     }
 
     removeContainer(name: string) {

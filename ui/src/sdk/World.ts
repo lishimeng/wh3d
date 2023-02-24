@@ -69,9 +69,7 @@ export class WorldImpl implements World {
 
         this.gridHelper = new GridHelper(
             size, 
-            tiles, 
-            //new Color(0x000000), 
-           // new Color(0x000044)
+            tiles
         )
         this.gridHelper.layers.set(Layers.Helper)
         this.scene.add(this.gridHelper)
@@ -79,7 +77,6 @@ export class WorldImpl implements World {
     }
 
     initLight() {
-
         var ambient = new AmbientLight(0xffffff, 1) //AmbientLight,影响整个场景的光源 
         ambient.layers.set(Layers.Light)       
         this.scene.add(ambient)
@@ -105,6 +102,7 @@ export class WorldImpl implements World {
         this.cameraHelper = new CameraHelper(this.camera)
         this.cameraHelper.layers.set(Layers.Helper)
         this.scene.add(this.cameraHelper)
+        Config.Camare.NormalPos.set(0, 200, 0)
         this.camera.position.set(Config.Camare.NormalPos.x, Config.Camare.NormalPos.y, Config.Camare.NormalPos.z)
         this.camera.lookAt(0, 0, 0)
     }

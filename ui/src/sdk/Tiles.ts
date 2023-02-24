@@ -9,8 +9,8 @@ class Tiles {
 
     getZeroPosition() {
         let x = - Config.Global.TilesW * Config.Global.UnitLegth / 2
-        let y = - Config.Global.TilesH * Config.Global.UnitLegth / 2
-        return new Vector3(x, 0, y)
+        let z = - Config.Global.TilesH * Config.Global.UnitLegth / 2
+        return new Vector3(x, 0, z).add(Config.Global.Offset)
     }
 
     getTiles(): number {

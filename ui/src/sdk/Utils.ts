@@ -18,6 +18,10 @@ const TransPos = (zeroIndex: Vector3, size: Vector3) => {
     return new Vector3(x + zero.x, y + zero.y, z + zero.z)
 }
 
+const TransZeroPos = (p: Vector3) => {
+    return p.add(Config.Global.Offset)
+}
+
 const CalcSize = (size: Vector3) => {
     let unit = Config.Global.UnitLegth
     return new Vector3(size.x * unit, size.y * unit, size.z * unit)

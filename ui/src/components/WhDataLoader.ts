@@ -85,7 +85,7 @@ const initAreaContainers = (sb: WhStoryBoard, areaName: string) => {
         deptId: 1,
         orgId: 1,
     }).then(async (res: any) => {
-        if (res.code == 200 && res.items.length > 0) {
+        if (res.code == 200 && res.items && res.items.length > 0) {
             console.log('开始加载区域托盘 ', areaName)
             let containers = []
             let cf = res.items

@@ -60,11 +60,9 @@ export class WorldImpl implements World {
         let i = 0;
         setInterval(() => {
             i = (i + 1) % this.posList.length
-            if (Config.Camare.Control) {
-
+            if (Config.Camare.Control && !Config.Camare.Lock) {
                 let p = this.posList[i]
-                Config.Camare.NormalPos.set(p.x, p.y, p.z)
-                this.moveCamera()
+                this.moveCamera(p)
             }
         }, 5000)
     }
@@ -121,13 +119,12 @@ export class WorldImpl implements World {
         this.cameraHelper = new CameraHelper(this.camera)
         this.cameraHelper.layers.set(Layers.Helper)
         this.scene.add(this.cameraHelper)
-        Config.Camare.NormalPos.set(0, 200, 0)
-        this.moveCamera()
+        this.moveCamera(new Vector3(0, 200, 0))
         this.camera.lookAt(0, 0, 0)
     }
 
-    moveCamera(): void {
-        this.camera.position.copy(Config.Camare.NormalPos)
+    moveCamera(pos: Vector3): void {
+        this.camera.position.copy(pos)
         this.camera.updateMatrixWorld()
     }
 
@@ -174,6 +171,11 @@ export class WorldImpl implements World {
         let cf = gui.addFolder('Camera')
         
         cf.add(Config.Camare, 'Control')
+        cf.add(Config.Camare, 'Lock').onChange(() => {
+            if (Config.Camare.Lock) {
+                this.moveCamera(new Vector3(0, 200, 0))
+            }
+        })
         // cf.add(() => {
         //     Config.Camare.NormalPos.copy(new Vector3(0, 200, 0))
         //     this.moveCamera()

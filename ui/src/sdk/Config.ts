@@ -20,6 +20,7 @@ const GlobalConfig = {
 const CamareConfig = {
     location: 'normal',
     Control: false,
+    Lock: false,
     Far: 3000, // 摄像机最大视野
     NormalPos: new Vector3(0, 200, 200)
 }

@@ -176,10 +176,6 @@ export class WorldImpl implements World {
                 this.moveCamera(new Vector3(0, 200, 0))
             }
         })
-        // cf.add(() => {
-        //     Config.Camare.NormalPos.copy(new Vector3(0, 200, 0))
-        //     this.moveCamera()
-        // }, "reset")
         
         cf.open()
 

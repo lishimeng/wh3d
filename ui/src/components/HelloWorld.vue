@@ -29,7 +29,7 @@ const init = () => {
 
 const initWorld =() => {
   
-  let w = new WorldImpl(document.body)
+  let w = new WorldImpl()
   w.start()
 
   let sb = new WhStoryBoard(w.scene)

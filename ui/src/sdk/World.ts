@@ -1,5 +1,5 @@
 import { GUI } from "dat.gui"
-import { Scene, PerspectiveCamera, Mesh, AmbientLight, AxesHelper, WebGLRenderer, Color, HemisphereLight, HemisphereLightHelper, GridHelper, CameraHelper, Vector3 } from "three"
+import { Scene, PerspectiveCamera, Mesh, AmbientLight, AxesHelper, WebGLRenderer, Color, HemisphereLight, HemisphereLightHelper, GridHelper, CameraHelper, Vector3, Vector2, Raycaster } from "three"
 
 import { MapControls, OrbitControls } from "three/examples/jsm/controls/OrbitControls" 
 
@@ -7,7 +7,9 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import Config from "./Config"
 
 import { Cube, CubeImpl } from "./Cube"
-import { Layers } from "./Layers"
+import { DefaultLayerManager, Layers } from "./Layers"
+import { DefaultStorage } from "./Storage"
+import { DefaultEventManager } from "./Event"
 
 
 export interface World {
@@ -22,12 +24,14 @@ export class WorldImpl implements World {
     camera!: PerspectiveCamera
     cameraHelper!: CameraHelper
     renderer!: WebGLRenderer
-    orbitControl!: OrbitControls
 
-    mapControl!: MapControls
+    control!: MapControls
 
     hemiHelper!: HemisphereLightHelper
     stats: Stats
+
+    pointer: Vector2 = new Vector2()
+    raycast: Raycaster = new Raycaster()
 
     posList = new Array<Vector3>()
 
@@ -57,6 +61,7 @@ export class WorldImpl implements World {
         this.initControls()
         this.initGui()
         document.addEventListener('resize', this.onWindowResize, false)
+        document.addEventListener('pointerdown', (event)=> {this.onMouseClick(event)}, false)
         let i = 0;
         setInterval(() => {
             i = (i + 1) % this.posList.length
@@ -65,12 +70,24 @@ export class WorldImpl implements World {
                 this.moveCamera(p)
             }
         }, 5000)
+        this.raycast.layers.set(Layers.Goods)
+
     }
 
     onWindowResize(): void {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
+    }
+
+    onMouseClick(event: any): void{
+
+        console.log(event.clientX + ":" + event.clientY)
+        this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	    this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        DefaultEventManager.updtePointer(this.pointer.x, this.pointer.y)
+        
+        DefaultEventManager.update(this.scene, this.camera)
     }
 
     initScene() {
@@ -95,17 +112,8 @@ export class WorldImpl implements World {
 
     initLight() {
         var ambient = new AmbientLight(0xffffff, 1) //AmbientLight,影响整个场景的光源 
-        ambient.layers.set(Layers.Light)       
+        ambient.layers.set(Layers.Light)
         this.scene.add(ambient)
-
-        const hemiLight = new HemisphereLight( 0xeeeeee, 0x080820 )
-        hemiLight.position.set( 0, 20000, 0 )
-        hemiLight.layers.set(Layers.Light)
-        
-        this.hemiHelper = new HemisphereLightHelper(hemiLight, 20)
-        this.hemiHelper.color = new Color(0xffffff)
-        this.hemiHelper.layers.set(Layers.Helper)
-        this.scene.add( this.hemiHelper )
     }
 
     initCamera(): void {
@@ -116,11 +124,11 @@ export class WorldImpl implements World {
             Config.Camare.Far
         )
 
-        this.cameraHelper = new CameraHelper(this.camera)
-        this.cameraHelper.layers.set(Layers.Helper)
-        this.scene.add(this.cameraHelper)
+        this.camera.layers.set(Layers.Environment)
+        this.scene.add(this.camera)
         this.moveCamera(new Vector3(0, 200, 0))
         this.camera.lookAt(0, 0, 0)
+        DefaultLayerManager.camera = this.camera
     }
 
     moveCamera(pos: Vector3): void {
@@ -136,32 +144,18 @@ export class WorldImpl implements World {
     }
 
     initControls(): void {
-        this.orbitControl = new OrbitControls(this.camera, this.renderer.domElement);
-        //this.orbitControl.enableDamping = true;
-        //this.orbitControl.dampingFactor = 0.5;
-        // 视角最小距离
-        this.orbitControl.minDistance = 10;
-        // 视角最远距离
-        this.orbitControl.maxDistance = 50000;
-        // 最大角度
-        this.orbitControl.maxPolarAngle = Math.PI / 2.2;
 
-        this.orbitControl.autoRotate = true
+        this.control = new MapControls(this.camera, this.renderer.domElement)
 
-        this.orbitControl.target = new Vector3(0, 0, 0)
+        this.control.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+        this.control.dampingFactor = 0.05;
 
+        this.control.screenSpacePanning = false;
 
-        // this.mapControl = new MapControls(this.camera, this.renderer.domElement)
+        this.control.minDistance = 100;
+        this.control.maxDistance = 500;
 
-        // // this.mapControl.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-        // this.mapControl.dampingFactor = 0.05;
-
-        // this.mapControl.screenSpacePanning = false;
-
-        // this.mapControl.minDistance = 100;
-        // this.mapControl.maxDistance = 500;
-
-        // this.mapControl.maxPolarAngle = Math.PI / 2;
+        this.control.maxPolarAngle = Math.PI / 2;
     }
 
     initGui():void {
@@ -201,46 +195,10 @@ export class WorldImpl implements World {
         requestAnimationFrame(() => {
             this.animate()
         })
-        if (Config.Camare.Control) {
-            this.orbitControl?.update()
-        }
-        // this.mapControl?.update()
+        this.control?.update()
 
-        if (Config.Layer.Environment) {
-            this.camera.layers.enable(Layers.Environment)
-        } else {
-            this.camera.layers.disable(Layers.Environment)
-        }
-
-        if (Config.Layer.Facility) {
-            this.camera.layers.enable(Layers.Facility)
-        } else {
-            this.camera.layers.disable(Layers.Facility)
-        }
-
-        if (Config.Layer.Light) {
-            this.camera.layers.enable(Layers.Light)
-        } else {
-            this.camera.layers.disable(Layers.Light)
-        }
-
-        if (Config.Layer.Goods) {
-            this.camera.layers.enable(Layers.Goods)
-        } else {
-            this.camera.layers.disable(Layers.Goods)
-        }
-
-        this.cameraHelper.visible = Config.Layer.Helper
-        this.hemiHelper.visible = Config.Layer.Helper
-        if (Config.Layer.Helper) {
-            this.camera.layers.enable(Layers.Helper)
-        } else {
-            this.camera.layers.disable(Layers.Helper)
-        }
+        DefaultLayerManager.update()
         
-        this.cameraHelper.update()
-        this.hemiHelper.update()
-
         this.stats.update()
         this.renderer?.render(this.scene, this.camera);
 

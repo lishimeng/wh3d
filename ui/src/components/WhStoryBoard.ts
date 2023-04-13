@@ -145,7 +145,9 @@ export default class WhStoryBoard extends StoryBoard {
         let mesh = container.mesh
 
         mesh.position.set(c.pos.x, c.pos.y, c.pos.z)
+        mesh.userData["c_name"] = c.name
         this.add(mesh)
+        DefaultStorage.containers.push(mesh)
         DefaultStorage.containerMesh.set(c.name, container) // 保存container
     }
 

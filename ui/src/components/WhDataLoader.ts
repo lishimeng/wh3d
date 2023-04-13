@@ -70,6 +70,7 @@ const initData = async (sb: WhStoryBoard) => {
     // 循环每个区域
     for (let i = 0; i < AreaConfig.areas.length; i++) {
         // 初始化区域的托盘信息
+        // if (i > 0) {break}
         initAreaContainers(sb, AreaConfig.areas[i].name)
     }
 
@@ -90,6 +91,7 @@ const initAreaContainers = (sb: WhStoryBoard, areaName: string) => {
             let containers = []
             let cf = res.items
             for (let i = 0; i < cf.length; i++) {
+                // if (i > 0) {break}
                 let data = cf[i]
                 let c = new ContainerInfo(data.name, data.area).Pos(data.pos.x, data.pos.y, data.pos.z)
                 containers.push(c)

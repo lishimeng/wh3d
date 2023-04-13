@@ -28,6 +28,7 @@ export class Container extends CubeImpl {
         if (mat == undefined) {
             return
         }
+        
         this.m.material = mat!
     }
 

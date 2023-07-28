@@ -1,5 +1,5 @@
-import { Vector3 } from "three"
-import { Util } from "./Utils"
+import {Vector3} from "three"
+import {Util} from "./Utils"
 
 abstract class Module {
     name: string = '' // 编号
@@ -28,7 +28,7 @@ abstract class Module {
     }
 }
 
-class AreaInfo extends Module{
+class AreaInfo extends Module {
 
     constructor(name: string) {
         super()
@@ -37,14 +37,15 @@ class AreaInfo extends Module{
 
     /**
      * 俯视视图下坐标， 左上为0点
-     * @param x 
-     * @param z 
-     * @returns 
+     * @param x
+     * @param z
+     * @returns
      */
-    Pos(x: number, z: number): AreaInfo { 
+    Pos(x: number, z: number): AreaInfo {
         this.tile.set(x, 0, z)
         return this
     }
+
     Size(containers: number, bins: number): AreaInfo {
         this.tileSize.set(containers, 0, bins)
         return this
@@ -68,17 +69,17 @@ class ContainerInfo extends Module {
     /**
      * 相对于Area的tile坐标
      * @param p
-     * @returns 
+     * @returns
      */
-    Pos(x?: number, y?: number, z?: number): ContainerInfo { 
+    Pos(x?: number, y?: number, z?: number): ContainerInfo {
         this.tileRelative.set(x!, y!, z!)
         return this
     }
 
     /**
      * 所属区域的tile坐标
-     * @param p 
-     * @returns 
+     * @param p
+     * @returns
      */
     AreaPos(p: Vector3): ContainerInfo {
         this.areaTile.set(p.x, p.y, p.z)
@@ -87,10 +88,17 @@ class ContainerInfo extends Module {
 
     Build(): void {
         // tilePos
-        let x = this.areaTile.x + this.tileRelative.x
-        let y = this.areaTile.y + this.tileRelative.y
-        let z = this.areaTile.z + this.tileRelative.z
+        // let x = this.areaTile.x + this.tileRelative.x
+        // let y = this.areaTile.y + this.tileRelative.y
+        // let z = this.areaTile.z + this.tileRelative.z
+        let x = this.tileRelative.x
+        let y = this.tileRelative.y
+        let z = this.tileRelative.z
         this.tile.set(x, y, z)
+
+        if (this.areaName == 'PX04') {
+            console.log(this.areaTile, this.tileRelative)
+        }
 
         // 计算大小, 固定, 占用一个单位
         this.tileSize.set(1, 1, 1)
@@ -99,7 +107,7 @@ class ContainerInfo extends Module {
     }
 }
 
-class StationInfo extends Module{
+class StationInfo extends Module {
 
     face = new Vector3(0, 0, 0)
 
@@ -111,20 +119,21 @@ class StationInfo extends Module{
 
     /**
      * 俯视视图下坐标， 左上为0点
-     * @param x 
-     * @param z 
-     * @returns 
+     * @param x
+     * @param z
+     * @returns
      */
-    Pos(x: number, z: number): StationInfo { 
+    Pos(x: number, z: number): StationInfo {
         this.tile.set(x, 0, z)
         return this
     }
+
     /**
      * 朝向，按坐标轴旋转
      * @param x x*PI >0生效
      * @param y y*PI >0生效
      * @param z z*PI >0生效
-     * @returns 
+     * @returns
      */
     FaceTo(x: number, y: number, z: number): StationInfo {
         this.face.set(x, y, z)
@@ -136,4 +145,43 @@ class StationInfo extends Module{
     }
 }
 
-export { AreaInfo, ContainerInfo, StationInfo }
+// BIN-区域中的每条BIN
+class BinInfo extends Module {
+
+    face = new Vector3(0, 0, 0)
+
+    constructor(name: string) {
+        super()
+        this.name = name
+        this.tileSize = new Vector3(1, 1, 1)
+    }
+
+    /**
+     * 俯视视图下坐标， 左上为0点
+     * @param x
+     * @param z
+     * @returns
+     */
+    Pos(x: number, z: number): StationInfo {
+        this.tile.set(x, 0, z)
+        return this
+    }
+
+    /**
+     * 朝向，按坐标轴旋转
+     * @param x x*PI >0生效
+     * @param y y*PI >0生效
+     * @param z z*PI >0生效
+     * @returns
+     */
+    FaceTo(x: number, y: number, z: number): StationInfo {
+        this.face.set(x, y, z)
+        return this
+    }
+
+    Build(): void {
+        super.Build()
+    }
+}
+
+export {AreaInfo, ContainerInfo, StationInfo, BinInfo}

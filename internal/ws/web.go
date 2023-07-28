@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/lishimeng/go-log"
 	"github.com/lishimeng/wh3d/internal/etc"
-	"github.com/lishimeng/wh3d/static"
 	"net/http"
 	"time"
 )
@@ -56,7 +55,7 @@ func Web(_ context.Context) (err error) {
 		log.Info("websocket start")
 		mux := http.NewServeMux()
 		mux.HandleFunc("/subscribe", subscribe)
-		mux.Handle("/", http.FileServer(http.FS(static.Static)))
+		//mux.Handle("/", http.FileServer(http.FS(static.Static)))
 		log.Info(http.ListenAndServe(etc.Config.Web.Listen, mux))
 	}()
 

@@ -4,7 +4,7 @@
  */
  class SocketService {
     static instance: SocketService;
-  
+
     /**
      * 单例模式
      */
@@ -18,16 +18,16 @@
     ws: any = null;
 
     url: string = ''
-  
+
     // 存储回调函数
     callBackMapping = {};
-  
+
     // 标识是否连接成功
     connected = false;
-  
+
     // 记录重试的次数
     sendRetryCount = 0;
-  
+
     // 重新连接尝试的次数
     connectRetryCount = 0;
 
@@ -65,7 +65,7 @@
       this.ws.onmessage = (m:any) => {
         this.onmessage(m)
       }
-  
+
       // 当连接成功之后, 服务器关闭的情况 ｜  连接服务端失败
       this.ws.onclose = () => {
         if (this.connectRetryCount >= 10) {
@@ -81,7 +81,7 @@
           }, 1000);
         }
       };
-  
+
       // websocket连接错误
       this.ws.onerror = function () {
         console.log('Error:websocket连接错误');
@@ -91,7 +91,7 @@
       // 判断此时此刻有没有连接成功
       if (this.connected) {
         this.sendRetryCount = 0;
-  
+
         this.ws.send(JSON.stringify(data));
       } else {
         this.sendRetryCount++;
@@ -101,7 +101,7 @@
         }, 1000);
       }
     }
-  
+
     /**
      * 关闭websocket连接
      */

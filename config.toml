@@ -1,15 +1,15 @@
 [web]
-listen = ":80"
+listen = ":81"
 
 [mq]
-conn = "amqp://user:pass@192.168.1.1:5672/"
+conn = "amqp://ows:thingple@127.0.0.1:5672/"
 [mq.subscribe]
-whEvent  = "wh_events"
+whEvent = "wh_events_test"
 
 [db]
-user = "postgres"
-password = "postgres"
+user = "ows"
+password = "thingple"
 host = "127.0.0.1"
 port = 5432
-database = "postgres"
+database = "wms"
 ssl = "disable" #require/verify-full/verify-ca/disable

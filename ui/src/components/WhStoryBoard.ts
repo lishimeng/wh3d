@@ -1,17 +1,17 @@
-import { Scene, Vector2, Vector3 } from "three"
-import { Area } from "../sdk/models/Area"
-import { Bin } from "../sdk/models/Bin"
-import { Container } from "../sdk/models/Container"
-import { Ground } from "../sdk/models/Ground"
-import { Resources } from "../sdk/Resources"
-import { DefaultLoader } from "../sdk/Loader"
+import {Scene, Vector2, Vector3} from "three"
+import {Area} from "../sdk/models/Area"
+import {Bin} from "../sdk/models/Bin"
+import {Container} from "../sdk/models/Container"
+import {Ground} from "../sdk/models/Ground"
+import {Resources} from "../sdk/Resources"
+import {DefaultLoader} from "../sdk/Loader"
 import Config from "../sdk/Config"
-import { Util } from "../sdk/Utils"
-import { DefaultStorage } from "../sdk/Storage"
-import { AreaInfo, ContainerInfo, StationInfo } from "../sdk/Data"
-import { Wall } from "../sdk/models/Wall"
-import { Label } from "../sdk/models/Label"
-import { Station } from "../sdk/models/Station"
+import {Util} from "../sdk/Utils"
+import {DefaultStorage} from "../sdk/Storage"
+import {AreaInfo, ContainerInfo, StationInfo} from "../sdk/Data"
+import {Wall} from "../sdk/models/Wall"
+import {Label} from "../sdk/models/Label"
+import {Station} from "../sdk/models/Station"
 import StoryBoard from "../sdk/StoryBoard"
 
 import * as FloorConfig from './a511_floor.json'
@@ -29,7 +29,7 @@ export default class WhStoryBoard extends StoryBoard {
 
         this.loadFloor()
         this.loadSky()
-        
+
         this.loadWalls()
         this.loadOthers()
     }
@@ -49,24 +49,25 @@ export default class WhStoryBoard extends StoryBoard {
         let bg = DefaultLoader.getTexture(Resources.SkyScene)
         this.scene.background = bg
     }
+
     loadWalls() {
         console.log('开始加载墙面:4个面')
 
         let width = Config.Global.TilesW
         let height = 29
         this.loadWall(
-            new Vector3(-1, 0, -1), 
+            new Vector3(-1, 0, -1),
             new Vector3(width + 1, 1, 1)) // 上
         this.loadWall(
-            new Vector3(-1, 0, height), 
+            new Vector3(-1, 0, height),
             new Vector3(width + 1, 1, 1)) // 下
 
         this.loadWall(
-            new Vector3(-1, 0, 0), 
+            new Vector3(-1, 0, 0),
             new Vector3(1, 1, height)) // 左
 
         this.loadWall(
-            new Vector3(width - 1, 0, 0), 
+            new Vector3(width - 1, 0, 0),
             new Vector3(1, 1, height)) // 右
     }
 
@@ -77,20 +78,23 @@ export default class WhStoryBoard extends StoryBoard {
 
         let wall = new Wall(s)
         let mesh = wall.mesh
-        
+
         mesh.position.set(p.x, p.y, p.z)
-        
+
         this.add(mesh)
     }
 
     loadBin(): void {
         let binWidth = 18
 
-        for (let i = 0; i < 3; i++) {
-            let b = new Bin()
-            b.mesh.position.set(0,0, (i + 1) * binWidth + 10)
-            this.add(b.mesh)
-        }
+        // for (let i = 0; i < 3; i++) {
+        //     let b = new Bin()
+        //     b.mesh.position.set(0, 0, i)
+        //     this.add(b.mesh)
+        // }
+        let b = new Bin()
+        b.mesh.position.set(10, 0, 10)
+        this.add(b.mesh)
     }
 
     async loadAreas(areas: AreaInfo[]): Promise<void> {
@@ -117,14 +121,16 @@ export default class WhStoryBoard extends StoryBoard {
     async loadContainers(containers: ContainerInfo[]): Promise<void> {
 
         for (let i = 0; i < containers.length; i++) {
-          let c: ContainerInfo = containers[i]
-          let areaInfo = DefaultStorage.areaLocMap.get(c.areaName)
-          if (areaInfo == null || areaInfo == undefined) { continue }
+            let c: ContainerInfo = containers[i]
+            let areaInfo = DefaultStorage.areaLocMap.get(c.areaName)
+            if (areaInfo == null || areaInfo == undefined) {
+                continue
+            }
 
-          c.AreaPos(areaInfo.tile)
-          c.Build()
-          DefaultStorage.containerLocMap.set(c.name, c)
-          this.loadContainer(c)
+            c.AreaPos(areaInfo.tile)
+            c.Build()
+            DefaultStorage.containerLocMap.set(c.name, c)
+            this.loadContainer(c)
         }
     }
 
@@ -169,6 +175,25 @@ export default class WhStoryBoard extends StoryBoard {
 
         DefaultStorage.stationMesh.set(s.name, b)
     }
+
+    // async loadBins(stations: Bin[]) {
+    //
+    //     for (let i = 0; i < stations.length; i++) {
+    //         let station = stations[i]
+    //         station.Build()
+    //         // 存储
+    //         DefaultStorage.stationMap.set(station.name, station)
+    //         this.loadBin(station)
+    //     }
+    // }
+
+    // loadBin(s: Bin) {
+    //     let b = new Bin(s.name, s.size.x, s.size.z, s.face)
+    //     b.mesh.position.set(s.pos.x, 1, s.pos.z)
+    //     this.add(b.mesh)
+    //
+    //     DefaultStorage.stationMesh.set(s.name, b)
+    // }
 
     loadOthers() {
     }

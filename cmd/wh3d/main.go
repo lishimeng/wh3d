@@ -6,6 +6,8 @@ import (
 	"github.com/lishimeng/app-starter"
 	etc2 "github.com/lishimeng/app-starter/etc"
 	"github.com/lishimeng/go-log"
+	persistence "github.com/lishimeng/go-orm"
+	"github.com/lishimeng/wh3d/internal/db"
 	"github.com/lishimeng/wh3d/internal/etc"
 	"github.com/lishimeng/wh3d/internal/setup"
 	"time"
@@ -42,8 +44,22 @@ func _main() (err error) {
 			return err
 		}
 
+		dbConfig := persistence.PostgresConfig{
+			UserName:  etc.Config.Db.User,
+			Password:  etc.Config.Db.Password,
+			Host:      etc.Config.Db.Host,
+			Port:      etc.Config.Db.Port,
+			DbName:    etc.Config.Db.Database,
+			InitDb:    true,
+			AliasName: "default",
+			SSL:       etc.Config.Db.Ssl,
+		}
+
 		builder.
 			PrintVersion().
+			EnableWeb(":82", setup.Route).
+			EnableDatabase(dbConfig.Build(),
+				db.RegisterTables()...).
 			ComponentAfter(setup.Setup)
 		return err
 	}, func(s string) {

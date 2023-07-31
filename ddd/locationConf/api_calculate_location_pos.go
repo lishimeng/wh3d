@@ -3,8 +3,8 @@ package locationConf
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/lishimeng/app-starter"
+	"github.com/lishimeng/app-starter/persistence"
 	"github.com/lishimeng/go-log"
-	persistence "github.com/lishimeng/go-orm"
 	"github.com/lishimeng/wh3d/ddd/common"
 	"github.com/lishimeng/wh3d/internal/db/model"
 )

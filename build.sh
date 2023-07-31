@@ -1,31 +1,70 @@
 #!/bin/bash
-NAME="wh3d"
-MAIN_PATH="cmd/wh3d/main.go"
-ORG="lishimeng"
+Org="lishimeng"
 
 # shellcheck disable=SC2046
-VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+Version=$(git describe --tags $(git rev-list --tags --max-count=1))
 # shellcheck disable=SC2154
-COMMIT=$(git log --pretty=format:"%h" -1)
+GitCommit=$(git log --pretty=format:"%h" -1)
+BuildTime=$(date +%FT%T%z)
 
-build_application(){
-  git checkout "${VERSION}"
-  docker build -t "${ORG}/${NAME}:${VERSION}" \
-  --build-arg NAME="${NAME}" \
-  --build-arg VERSION="${VERSION}" \
-  --build-arg COMMIT="${COMMIT}" \
-  --build-arg MAIN_PATH="${MAIN_PATH}" .
+checkout_tag(){
+  git checkout "${Version}"
+}
+
+build_image(){
+  local Name=$1
+  local AppPath=$2
+  print_app_info "${Name}" "${AppPath}"
+
+  docker build -t "${Org}/${Name}:${Version}" \
+  --build-arg NAME="${Name}" \
+  --build-arg VERSION="${Version}" \
+  --build-arg BUILD_TIME="${BuildTime}" \
+  --build-arg COMMIT="${GitCommit}" \
+  --build-arg APP_PATH="${AppPath}" -f "./${AppPath}/Dockerfile" .
 }
 
 print_app_info(){
+  local Name=$1
+  local AppPath=$2
   echo "****************************************"
-  echo "App:${NAME}"
-  echo "Version:${VERSION}"
-  echo "Commit:${COMMIT}"
-  echo "Main_Path:${MAIN_PATH}"
+  echo "App:${Org}:${Name}"
+  echo "Version:${Version}"
+  echo "Commit:${GitCommit}"
+  echo "Build:${BuildTime}"
+  echo "Main_Path:${AppPath}"
   echo "****************************************"
   echo ""
 }
 
-print_app_info
-build_application
+push_image(){
+  local Name=$1
+  echo "****************************************"
+  echo "Push:${Org}:${Name}:${Version}"
+  echo "****************************************"
+  echo ""
+  docker tag  "${Org}/${Name}:${Version}" "${Org}/${Name}"
+  docker push "${Org}/${Name}:${Version}"
+  docker push "${Org}/${Name}"
+}
+
+build_all(){
+  checkout_tag
+  build_image 'wh3d' 'cmd/wh3d'
+  build_image 'wh3d-admin' 'cmd/wh3d-admin'
+}
+
+push_all(){
+  push_image 'wh3d'
+  push_image 'wh3d-admin'
+}
+
+case  $1 in
+    push)
+		push_all
+        ;;
+    *)
+		build_all
+        ;;
+esac
+

@@ -7,9 +7,9 @@ import (
 	etc2 "github.com/lishimeng/app-starter/etc"
 	"github.com/lishimeng/app-starter/persistence"
 	"github.com/lishimeng/go-log"
+	"github.com/lishimeng/wh3d/cmd/wh3d/setup"
 	"github.com/lishimeng/wh3d/internal/db"
 	"github.com/lishimeng/wh3d/internal/etc"
-	"github.com/lishimeng/wh3d/internal/setup"
 	"time"
 )
 import _ "github.com/lib/pq"
@@ -26,7 +26,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Millisecond * 100)
 }
 
 func _main() (err error) {
@@ -57,7 +57,7 @@ func _main() (err error) {
 
 		builder.
 			PrintVersion().
-			EnableWeb(":82", setup.Route).
+			EnableWeb(etc.Config.Web.Listen, setup.Route).
 			EnableDatabase(dbConfig.Build(),
 				db.RegisterTables()...).
 			ComponentAfter(setup.Setup)

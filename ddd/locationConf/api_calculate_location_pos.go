@@ -1,4 +1,4 @@
-package threeD
+package locationConf
 
 import (
 	"github.com/kataras/iris/v12"

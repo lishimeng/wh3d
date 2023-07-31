@@ -1,4 +1,4 @@
-package threeD
+package locationConf
 
 import "github.com/lishimeng/app-starter"
 
@@ -8,12 +8,18 @@ type reqLocationConfJson struct {
 }
 
 type locationConfJson struct {
-	Id    int    `json:"id"`
-	WhNo  string `json:"whNo"` // 所属仓库-A511/A610/...
-	No    string `json:"name"` // 区域名称
-	pos   `json:"pos"`
-	size  `json:"size"`
-	Ctime string `json:"ctime"`
+	//Id    int    `json:"id"`
+	//WhNo  string `json:"whNo"` // 所属仓库-A511/A610/...
+	//No    string `json:"name"` // 区域名称
+	//pos   `json:"pos"`
+	//size  `json:"size"`
+	//Ctime string `json:"ctime"`
+
+	ConfId     int `json:"confId"`     // 库位坐标配置id：无即为添加，有即为修改
+	LocationId int `json:"locationId"` // 对应的库存库位id
+	X          int `json:"x"`          //
+	Y          int `json:"y"`          //
+	Z          int `json:"z"`          //
 }
 
 type pos struct {

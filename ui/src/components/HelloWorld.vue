@@ -28,7 +28,7 @@ const init = () => {
 }
 
 const initWorld =() => {
-  
+
   let w = new WorldImpl()
   w.start()
 

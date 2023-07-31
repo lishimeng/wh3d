@@ -23,3 +23,7 @@ type PlatformConf struct {
 	FaceToZ       float64
 	DimensionArea string // 所属区域
 }
+
+func (u *PlatformConf) TableName() string {
+	return "station_conf"
+}

@@ -1,4 +1,4 @@
-package threeD
+package locationConf
 
 import (
 	"github.com/kataras/iris/v12"
@@ -26,17 +26,14 @@ type containerInfo struct {
 func initContainersApi(ctx iris.Context) {
 	var resp app.PagerResponse
 
-	area := ctx.Params().GetStringDefault("area", "")
-	if len(area) == 0 {
-		resp.Code = common.RespCodeError
-		common.ResponseJSON(ctx, ctx)
-		return
-	}
+	//area := ctx.Params().GetStringDefault("area", "")
+	area := ctx.URLParamDefault("area", "")
 
 	aoc := app.GetOrm().Context
 	containers := make([]view.InventoryContainerItemInfoView, 0)
-	_, err := aoc.QueryTable(new(view.InventoryContainerItemInfoView)).Filter("dimension_area", area).
-		Filter("group", 115).All(&containers)
+	_, err := aoc.QueryTable(new(view.InventoryContainerItemInfoView)).
+		Filter("dimension_area", area).
+		All(&containers)
 	if err != nil {
 		resp.Code = common.RespCodeError
 		common.ResponseJSON(ctx, ctx)

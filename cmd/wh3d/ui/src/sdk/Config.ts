@@ -4,7 +4,7 @@ import { Color, Vector3 } from "three"
 
 const UnitLegth = 4
 
-const TilesW = 80
+const TilesW = 40
 const TilesH = 80
 
 const GlobalConfig = {

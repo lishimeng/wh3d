@@ -6,6 +6,7 @@ package model
 * @Description:
  */
 
+// LocationConf 库位配置
 type LocationConf struct {
 	Pk
 	LocationId  int // 对应系统库位ID，每个库位对应一个库位配置信息，用于在3D模型中展示

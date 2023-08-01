@@ -11,6 +11,7 @@ func RegisterTables() (tables []interface{}) {
 		new(model.LocationConf),                  // 库位配置
 		new(model.PlatformConf),                  // 站台配置
 		new(view.InventoryContainerItemInfoView), // 库存视图
-		new(model.LocationInfo))                  // 库位信息
+		new(model.LocationInfo),                  // 库位信息
+		new(model.FloorConf))                     // 地板信息
 	return
 }

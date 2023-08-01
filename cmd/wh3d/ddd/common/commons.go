@@ -15,6 +15,11 @@ const (
 	RespCodeError       = 400
 )
 
+const (
+	DefaultPageSize = 10
+	DefaultPageNo   = 1
+)
+
 // 响应信息
 const (
 	RespMsgNotFount      = "not found"

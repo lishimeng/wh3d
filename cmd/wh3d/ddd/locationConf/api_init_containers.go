@@ -4,9 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/lishimeng/app-starter"
 	"github.com/lishimeng/app-starter/tool"
-	"github.com/lishimeng/go-log"
 	"github.com/lishimeng/wh3d/cmd/wh3d/ddd/common"
-	"github.com/lishimeng/wh3d/internal/db/model"
 	"github.com/lishimeng/wh3d/internal/db/view"
 	"strconv"
 	"strings"
@@ -33,6 +31,8 @@ func initContainersApi(ctx iris.Context) {
 	aoc := app.GetOrm().Context
 	containers := make([]view.InventoryContainerItemInfoView, 0)
 	_, err := aoc.QueryTable(new(view.InventoryContainerItemInfoView)).
+		//Offset(0).
+		//Limit(10).
 		Filter("dimension_area", area).
 		All(&containers)
 	if err != nil {
@@ -40,28 +40,29 @@ func initContainersApi(ctx iris.Context) {
 		common.ResponseJSON(ctx, ctx)
 		return
 	}
+
 	for _, container := range containers {
 
 		// 加上对应 区域的相对XYZ
 		// warehosue
-		warehouse := model.AreaConf{
-			No: container.DimensionArea,
-		}
-		if err := aoc.Read(&warehouse, "No"); err != nil {
-			log.Info(err, container.DimensionArea)
-			continue
-		}
+		//warehouse := model.AreaConf{
+		//	No: container.DimensionArea,
+		//}
+		//if err := aoc.Read(&warehouse, "No"); err != nil {
+		//	log.Info(err, container.DimensionArea)
+		//	continue
+		//}
 
-		// X 控制x轴
-		// Z 控制y轴
-		// Y 控制高度-
-		//pos.X += warehouse.PositionX
-		//pos.Y += warehouse.PositionY
-		//pos.Z += warehouse.PositionZ
+		// RelX 控制x轴
+		// RelZ 控制y轴
+		// RelY 控制高度-
+		//pos.RelX += warehouse.PosX
+		//pos.RelY += warehouse.PosY
+		//pos.RelZ += warehouse.PosZ
 
-		//pos.X = warehouse.PositionX + container.RelX
-		//pos.Y = warehouse.PositionY + container.RelY
-		//pos.Z = warehouse.PositionZ + container.RelZ
+		//pos.RelX = warehouse.PosX + container.RelX
+		//pos.RelY = warehouse.PosY + container.RelY
+		//pos.RelZ = warehouse.PosZ + container.RelZ
 
 		pos := position{
 			X: container.PosX,
@@ -81,7 +82,7 @@ func initContainersApi(ctx iris.Context) {
 
 }
 
-// 处理字符串，获取x,y,z。如 x-y-z => {X:x,Y:y,Z:z}
+// 处理字符串，获取x,y,z。如 x-y-z => {RelX:x,RelY:y,RelZ:z}
 func genPositionByString(xyz string) (p position, err error) {
 	var sep = "-"
 	ss := strings.Split(xyz, sep)

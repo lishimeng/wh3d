@@ -39,9 +39,9 @@ func apiList(ctx iris.Context) {
 				WhNo: item.WhNo,
 				No:   item.No,
 				pos: pos{
-					X: item.PositionX,
-					Y: item.PositionY,
-					Z: item.PositionZ,
+					X: item.PosX,
+					Y: item.PosY,
+					Z: item.PosZ,
 				},
 				size: size{
 					H: item.Height,

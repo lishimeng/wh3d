@@ -1,35 +1,38 @@
 import WhStoryBoard from "./WhStoryBoard"
-import {AreaInfo, ContainerInfo, StationInfo} from '../sdk/Data';
+import {AreaInfo, ContainerInfo} from '../sdk/Data';
 
-// TODO 假数据
-import * as AreaConfig from './a511_area.json'
-import * as StationConfig from './a511_station.json'
-
-import {initAreaByNoApi, initContainersByAreaApi, initPlatformsApi} from './api'
+import {GetRequest, initAreaByNoApi, initContainersByAreaApi} from './api'
 
 const api = '/subscribe'
+
 
 const LoadData = async (sb: WhStoryBoard) => {
     console.log('开始加载区域框')
 
-    const {items: areaData} = await initAreaByNoApi({"whNo": "A511"})
-    let areas = []
+    console.log(GetRequest().wh)
 
+    let urlParams = GetRequest();
+
+    const {items: areaData} = await initAreaByNoApi({"whNo": urlParams.wh ? urlParams.wh : 'A511'})
+    let areas = []
+    if (!areaData || areaData.length == 0) {
+        return
+    }
     for (let i = 0; i < areaData.length; i++) {
         let data = areaData[i]
         areas.push(new AreaInfo(data.name).Pos(data.pos.x, data.pos.z).Size(data.size.w, data.size.h))
     }
     await sb.loadAreas(areas)
 
-    console.log('开始加载发货站台')
-    const {items: platformData} = await initPlatformsApi({"whNo": "A511"})
-    let stations = []
-
-    for (let i = 0; i < platformData.length; i++) {
-        let data = platformData[i]
-        stations.push(new StationInfo(data.name).Pos(data.pos.x, data.pos.y).FaceTo(data.faceTo.x, data.faceTo.y, data.faceTo.z))
-    }
-    await sb.loadStations(stations)
+    // console.log('开始加载发货站台')
+    // const {items: platformData} = await initPlatformsApi({"whNo": "A511"})
+    // let stations = []
+    //
+    // for (let i = 0; i < platformData.length; i++) {
+    //     let data = platformData[i]
+    //     stations.push(new StationInfo(data.name).Pos(data.pos.x, data.pos.y).FaceTo(data.faceTo.x, data.faceTo.y, data.faceTo.z))
+    // }
+    // await sb.loadStations(stations)
 
     console.log('开始加载容器')
 

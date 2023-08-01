@@ -39,9 +39,9 @@ func calculateLocationPosition(ctx iris.Context) {
 			}
 			// 计算相量坐标值
 			// 区域在图中的绝对坐标+库位相对于区域的坐标= 库位在图中的绝对坐标
-			item.PosX = item.RelX + conf.PositionX
-			item.PosY = item.RelY + conf.PositionY
-			item.PosZ = item.RelZ + conf.PositionZ
+			item.PosX = item.RelX + conf.PosX
+			item.PosY = item.RelY + conf.PosY
+			item.PosZ = item.RelZ + conf.PosZ
 
 			if _, err := context.Context.Update(&item, "PosX", "PosY", "PosZ"); err != nil {
 				return err

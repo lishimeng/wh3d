@@ -59,8 +59,8 @@ func _main() (err error) {
 			PrintVersion().
 			EnableWeb(etc.Config.Web.Listen, setup.Route).
 			EnableDatabase(dbConfig.Build(),
-				db.RegisterTables()...).
-			ComponentAfter(setup.Setup)
+				db.RegisterTables()...)
+		//ComponentAfter(setup.Setup)
 		return err
 	}, func(s string) {
 		log.Info(s)

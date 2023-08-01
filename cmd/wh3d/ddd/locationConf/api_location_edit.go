@@ -62,7 +62,7 @@ func locationConfEdit(ctx iris.Context) {
 		} else {
 			calculatePositionYZX(&conf, &reqJson, &areaConf)
 
-			if _, err = c.Context.Update(&conf, "RelX", "RelY", "RelZ", "PosX", "PosY", "Pos"); err != nil {
+			if _, err = c.Context.Update(&conf, "RelX", "RelY", "RelZ", "PosX", "PosY", "PosZ"); err != nil {
 				return err
 			}
 		}
@@ -79,14 +79,14 @@ func locationConfEdit(ctx iris.Context) {
 
 func calculatePositionYZX(conf *model.LocationConf, reqJson *locationConfJson, areaConf *model.AreaConf) {
 	// 库位相对坐标（区域）
-	conf.RelX = reqJson.X
-	conf.RelY = reqJson.Y
-	conf.RelZ = reqJson.Z
+	conf.RelX = reqJson.RelX
+	conf.RelY = reqJson.RelY
+	conf.RelZ = reqJson.RelZ
 
 	// 绝对坐标（在地图中的0点坐标位置）
-	conf.PosX = reqJson.X + areaConf.PositionX
-	conf.PosY = reqJson.Y + areaConf.PositionY
-	conf.PosZ = reqJson.Z + areaConf.PositionZ
+	conf.PosX = reqJson.RelX + areaConf.PosX
+	conf.PosY = reqJson.RelY + areaConf.PosY
+	conf.PosZ = reqJson.RelZ + areaConf.PosZ
 
 	conf.AreaConfId = areaConf.Id
 }

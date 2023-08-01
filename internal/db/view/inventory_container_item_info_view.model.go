@@ -28,10 +28,11 @@ type InventoryContainerItemInfoView struct {
 	IsDel         bool   `orm:"column(is_del);"`             // 逻辑删除 false可以使用，true无法使用
 	Group         int    `orm:"column(group);"`              // 库位-组
 	Area          string `orm:"column(area);"`               // 库位-区域
-	// 库位坐标
-	PosX int `orm:"column(pos_x);"`
-	PosY int `orm:"column(pos_y);"`
-	PosZ int `orm:"column(pos_z);"`
+	// 库位配置坐标
+	LocationConfId int `orm:"column(location_conf_id)"`
+	PosX           int `orm:"column(pos_x);"`
+	PosY           int `orm:"column(pos_y);"`
+	PosZ           int `orm:"column(pos_z);"`
 
 	model.TableChangeInfo
 	model.DeptOrgTableInfo

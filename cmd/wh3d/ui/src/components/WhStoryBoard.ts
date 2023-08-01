@@ -5,40 +5,56 @@ import {Container} from "../sdk/models/Container"
 import {Ground} from "../sdk/models/Ground"
 import {Resources} from "../sdk/Resources"
 import {DefaultLoader} from "../sdk/Loader"
-import Config from "../sdk/Config"
 import {Util} from "../sdk/Utils"
 import {DefaultStorage} from "../sdk/Storage"
 import {AreaInfo, ContainerInfo, StationInfo} from "../sdk/Data"
 import {Wall} from "../sdk/models/Wall"
-import {Label} from "../sdk/models/Label"
 import {Station} from "../sdk/models/Station"
 import StoryBoard from "../sdk/StoryBoard"
 
-import * as FloorConfig from './a511_floor.json'
-import * as OtherConfig from './a511_other.json'
+// import * as FloorConfig from './a511_floor.json'
+import {initfloorconfApi,GetRequest} from './api'
 
 
 export default class WhStoryBoard extends StoryBoard {
+
+    private floorW: number
+    private floorH: number
 
     constructor(scene: Scene) {
         super(scene)
         this.init()
     }
 
-    init(): void {
+    async init(): Promise<void> {
 
-        this.loadFloor()
-        this.loadSky()
+        await this.loadFloor()
+        await this.loadSky()
 
-        this.loadWalls()
-        this.loadOthers()
+        await this.loadWalls()
+        await this.loadOthers()
     }
 
-    loadFloor(): void {
+    async loadFloor(): Promise<void> {
 
-        let s = Util.calcSize(new Vector3(FloorConfig.floorW, 1, FloorConfig.floorH))
+        let param = GetRequest();
+
+        const {items: items, code: code} = await initfloorconfApi({
+            whNo: param.wh
+        })
+        console.log(items, code)
+        if (code != 200) {
+            return
+        }
+
+        // let floorW = 0,
+        //     floorH = 0;
+        this.floorH = items[0].height
+        this.floorW = items[0].width
+
+        let s = Util.calcSize(new Vector3(this.floorW, 1, this.floorH))
         let floorFrom = Util.calcSize
-        let p = Util.transPos(new Vector3(0, 0, 0), new Vector3(FloorConfig.floorW, 0, FloorConfig.floorH))
+        let p = Util.transPos(new Vector3(0, 0, 0), new Vector3(this.floorW, 0, this.floorH))
         let ground = new Ground(p, new Vector2(s.x, s.z))
         this.add(ground.mesh)
     }
@@ -51,10 +67,12 @@ export default class WhStoryBoard extends StoryBoard {
     }
 
     loadWalls() {
-        console.log('开始加载墙面:4个面')
+        console.log('开始加载墙面:4个面', this.floorW, this.floorH)
 
-        let width = Config.Global.TilesW
-        let height = 29
+        // let width = Config.Global.TilesW
+        let width = this.floorW
+        // let height = 60
+        let height = this.floorH
         this.loadWall(
             new Vector3(-1, 0, -1),
             new Vector3(width + 1, 1, 1)) // 上

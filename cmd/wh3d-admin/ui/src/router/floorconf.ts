@@ -1,10 +1,10 @@
 export default [{
-    path: '/areaconf',
-    name: 'areaconf',
+    path: '/floorconf',
+    name: 'floorconf',
     component: () => import('/@/layout/routerView/parent.vue'),
-    redirect: '/areaconf/list',
+    redirect: '/floorconf/list',
     meta: {
-        title: '区域配置',
+        title: '地板配置',
         isLink: '',
         isHide: false,
         isKeepAlive: true,
@@ -15,11 +15,11 @@ export default [{
     },
     children: [
         {
-            path: '/areaconf/list',
-            name: 'areaconflist',
-            component: () => import('/@/views/areaconf/index.vue'),
+            path: '/floorconf/list',
+            name: 'floorconflist',
+            component: () => import('/@/views/floorconf/index.vue'),
             meta: {
-                title: '区域列表',
+                title: '地板列表',
                 isLink: '',
                 isHide: false,
                 isKeepAlive: true,

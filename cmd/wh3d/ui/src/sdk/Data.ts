@@ -52,6 +52,31 @@ class AreaInfo extends Module {
     }
 }
 
+// 货架
+class GoodsShelfInfo extends Module {
+
+    constructor(name: string) {
+        super()
+        this.name = name
+    }
+
+    /**
+     * 俯视视图下坐标， 左上为0点
+     * @param x
+     * @param z
+     * @returns
+     */
+    Pos(x: number, z: number): GoodsShelfInfo {
+        this.tile.set(x, 0, z)
+        return this
+    }
+
+    Size(containers: number, bins: number): GoodsShelfInfo {
+        this.tileSize.set(containers, 0, bins)
+        return this
+    }
+}
+
 /**
  * 货架上的货物
  */
@@ -96,9 +121,9 @@ class ContainerInfo extends Module {
         let z = this.tileRelative.z
         this.tile.set(x, y, z)
 
-        if (this.areaName == 'PX04') {
-            console.log(this.areaTile, this.tileRelative)
-        }
+        // if (this.areaName == 'PX04') {
+        //     console.log(this.areaTile, this.tileRelative)
+        // }
 
         // 计算大小, 固定, 占用一个单位
         this.tileSize.set(1, 1, 1)
@@ -184,4 +209,4 @@ class BinInfo extends Module {
     }
 }
 
-export {AreaInfo, ContainerInfo, StationInfo, BinInfo}
+export {AreaInfo, ContainerInfo, StationInfo, BinInfo,GoodsShelfInfo}

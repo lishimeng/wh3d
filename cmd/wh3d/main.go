@@ -57,10 +57,10 @@ func _main() (err error) {
 
 		builder.
 			PrintVersion().
-			EnableWeb(etc.Config.Web.Listen, setup.Route).
+			EnableWeb(":82", setup.Route).
 			EnableDatabase(dbConfig.Build(),
-				db.RegisterTables()...)
-		//ComponentAfter(setup.Setup)
+				db.RegisterTables()...).
+			ComponentAfter(setup.Setup)
 		return err
 	}, func(s string) {
 		log.Info(s)

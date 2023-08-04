@@ -28,7 +28,7 @@ const viteConfig: UserConfig = {
 		open: VITE_OPEN,
 		proxy: {
 			'/main': {
-				target: 'http://localhost:81/',
+				target: 'http://localhost:82/',
 				// target: 'http://1.117.50.21:89/',
 				changeOrigin: true,
 				ws: false,  // 开启 websockets 代理

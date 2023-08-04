@@ -36,6 +36,7 @@ class Materials {
             var floorMat = new MeshBasicMaterial({
                 map: texture
             });
+            console.log(floorMat)
             this.map.set(Resources.Floor, floorMat)
         })
 

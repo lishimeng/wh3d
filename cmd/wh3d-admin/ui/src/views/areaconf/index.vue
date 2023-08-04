@@ -14,24 +14,20 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-            <el-form-item label="库位号">
-              <el-input size="small" v-model="state.searchForm.locationNo" placeholder="库位号" clearable/>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
             <el-button size="small" type="primary" @click="doQuery">查询</el-button>
-            <el-button type="success" @click="calculatePosition()">自动计算坐标值</el-button>
+            <!--            <el-button type="success" @click="calculatePosition()">自动计算坐标值</el-button>-->
           </el-col>
         </el-row>
       </el-form>
       <el-table :data="state.pageation.tableData" style="width: 100%">
         <el-table-column type="index" label="序号" width="50"/>
-        <el-table-column prop="locationNo" label="库位号" show-overflow-tooltip></el-table-column>
         <el-table-column prop="warehouseNo" label="仓库号" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="area" label="区域" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="posX" label="X轴" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="posY" label="Y轴" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="posZ" label="Z轴" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="areaNo" label="区域" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="x" label="X轴" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="z" label="Z轴" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="y" label="Y轴" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="width" label="宽度" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="height" label="高度" show-overflow-tooltip></el-table-column>
         <el-table-column fixed="right" :label="'修改值'">
           <template #default="scope">
             <el-button size="mini" type="text" @click.stop="handleEditBefore(scope.row)">
@@ -52,14 +48,20 @@
     <el-dialog destroy-on-close title="修改" v-model="state.editDialogDetail" center width="40%"
                :before-close="handleCloseForQuestion">
       <el-form ref="ruleForm" :model="state.formData" :rules="state.rules" label-width="130px">
-        <el-form-item label="X" prop="title">
-          <el-input clearable v-model="state.formData.relX"></el-input>
+        <el-form-item label="X" prop="X轴">
+          <el-input clearable v-model="state.formData.x"></el-input>
         </el-form-item>
-        <el-form-item label="Y" prop="description">
-          <el-input clearable v-model="state.formData.relY"></el-input>
+        <el-form-item label="Y" prop="Y轴">
+          <el-input clearable v-model="state.formData.y"></el-input>
         </el-form-item>
-        <el-form-item label="Z" prop="description">
-          <el-input clearable v-model="state.formData.relZ"></el-input>
+        <el-form-item label="Z" prop="Z轴">
+          <el-input clearable v-model="state.formData.z"></el-input>
+        </el-form-item>
+        <el-form-item label="width" prop="宽度">
+          <el-input clearable v-model="state.formData.width"></el-input>
+        </el-form-item>
+        <el-form-item label="height" prop="高度">
+          <el-input clearable v-model="state.formData.height"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="state.editDialogDetail = false">{{ '取消' }}</el-button>
@@ -67,21 +69,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
-    <!-- 添加企业 -->
-<!--    <el-drawer-->
-<!--        :title="'添加企业'"-->
-<!--        v-model="state.addEnterpriseDraw"-->
-<!--        destroy-on-close-->
-<!--        custom-class="drawer"-->
-<!--        ref="drawer"-->
-<!--        :close-on-press-escape="true"-->
-<!--        :before-close="handleClose"-->
-<!--        direction="rtl"-->
-<!--        size="80%"-->
-<!--    >-->
-<!--      <addEnterprise/>-->
-<!--    </el-drawer>-->
   </div>
 </template>
 
@@ -89,25 +76,19 @@
 import {ElMessage} from 'element-plus';
 import {getCurrentInstance, onMounted, reactive} from 'vue';
 import {useRouter} from 'vue-router';
-import {
-  calculateposlocationApi,
-  editlocationconfApi,
-  getlocationconfByIdApi,
-  getlocationconfListApi
-} from '/@/api/locationconf';
+import {editareaconfApi, getareaconfListApi} from '/@/api/areaconf';
 
 const {proxy} = getCurrentInstance();
 
 // 路由
-//定义router变量
 const router = useRouter();
 
 const state = reactive({
   // 查询条件
   searchForm: {
-    warehouseNo: 'A511PX',
+    warehouseNo: '',
     locationNo: '',
-    area: 'PX01',
+    area: '',
   },
   // 列表分页
   pageation: {
@@ -123,12 +104,12 @@ const state = reactive({
   addEnterpriseDraw: false,
   // 表单
   formData: {
-    relX: 0,
-    relY: 0,
-    relZ: 0,
+    x: 0,
+    y: 0,
+    z: 0,
+    width: 0,
+    height: 0,
     confId: 0,
-    locationId: 0,
-    warehouseId: 0
   },
   rules: {
     // forkliftNo: [
@@ -174,7 +155,7 @@ function doQuery() {
 }
 
 function initTable() {
-  getlocationconfListApi({
+  getareaconfListApi({
     warehouseNo: state.searchForm.warehouseNo,
     locationNo: state.searchForm.locationNo,
     area: state.searchForm.area,
@@ -203,12 +184,12 @@ function handleEditBefore(row) {
   // });
 
   state.editDialogDetail = true;
-  state.formData.confId = row.confId
-  state.formData.warehouseId = row.warehouseId
-  state.formData.locationId = row.locationId
-  state.formData.relX = row.posX
-  state.formData.relY = row.posY
-  state.formData.relZ = row.posZ
+  state.formData.confId = row.id
+  state.formData.width = row.width
+  state.formData.height = row.height
+  state.formData.x = row.x
+  state.formData.y = row.y
+  state.formData.z = row.z
 }
 
 function handleClose(done) {
@@ -220,13 +201,13 @@ function handleClose(done) {
 function handleEdit() {
   proxy.$refs['ruleForm'].validate().then((value) => {
     if (value) {
-      editlocationconfApi({
-        confId: state.formData.confId,
-        warehouseId: state.formData.warehouseId,
-        locationId: state.formData.locationId,
-        relX: parseInt(state.formData.relX),
-        relY: parseInt(state.formData.relY),
-        relZ: parseInt(state.formData.relZ),
+      editareaconfApi({
+        id: state.formData.confId,
+        x: parseInt(state.formData.x),
+        y: parseInt(state.formData.y),
+        z: parseInt(state.formData.z),
+        width: parseInt(state.formData.width),
+        height: parseInt(state.formData.height)
       }).then((res) => {
         initTable();
         state.editDialogDetail = false;

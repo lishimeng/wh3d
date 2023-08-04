@@ -1,4 +1,4 @@
-import {Scene, Vector2, Vector3} from "three"
+import {Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, Scene, Vector2, Vector3} from "three"
 import {Area} from "../sdk/models/Area"
 import {Bin} from "../sdk/models/Bin"
 import {Container} from "../sdk/models/Container"
@@ -7,17 +7,19 @@ import {Resources} from "../sdk/Resources"
 import {DefaultLoader} from "../sdk/Loader"
 import {Util} from "../sdk/Utils"
 import {DefaultStorage} from "../sdk/Storage"
-import {AreaInfo, ContainerInfo, StationInfo} from "../sdk/Data"
+import {AreaInfo, ContainerInfo, GoodsShelfInfo, StationInfo} from "../sdk/Data"
 import {Wall} from "../sdk/models/Wall"
 import {Station} from "../sdk/models/Station"
 import StoryBoard from "../sdk/StoryBoard"
 
 // import * as FloorConfig from './a511_floor.json'
-import {initfloorconfApi,GetRequest} from './api'
+import {GetRequest, initfloorconfApi} from './api'
+import {GoodShelf} from "../sdk/models/GoodShelf";
 
 
 export default class WhStoryBoard extends StoryBoard {
 
+    // 地板宽高
     private floorW: number
     private floorH: number
 
@@ -37,10 +39,10 @@ export default class WhStoryBoard extends StoryBoard {
 
     async loadFloor(): Promise<void> {
 
-        let param = GetRequest();
+        let urlParams = GetRequest();
 
         const {items: items, code: code} = await initfloorconfApi({
-            whNo: param.wh
+            whNo: urlParams.id
         })
         console.log(items, code)
         if (code != 200) {
@@ -102,7 +104,7 @@ export default class WhStoryBoard extends StoryBoard {
         this.add(mesh)
     }
 
-    loadBin(): void {
+    async loadBin(): Promise<void> {
         let binWidth = 18
 
         // for (let i = 0; i < 3; i++) {
@@ -111,11 +113,33 @@ export default class WhStoryBoard extends StoryBoard {
         //     this.add(b.mesh)
         // }
         let b = new Bin()
-        b.mesh.position.set(10, 0, 10)
+        b.mesh.position.set(0, 0, 0)
         this.add(b.mesh)
     }
 
     async loadAreas(areas: AreaInfo[]): Promise<void> {
+
+        // 加载地面箭头
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+            // console.log("==============>floorMat",floorMat)
+            // let mesh = new Mesh(geo, floorMat)
+            // mesh.position.set(-12, 0, 6)
+            // this.add(mesh)
+            // const binMat: MeshStandardMaterial = new MeshStandardMaterial({color: 0xFF0000});
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(100, 6)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(-12, 0, 6)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
 
         for (let i = 0; i < areas.length; i++) {
             let area = areas[i]
@@ -124,6 +148,7 @@ export default class WhStoryBoard extends StoryBoard {
             DefaultStorage.areaLocMap.set(area.name, area)
             this.loadArea(area.name, area.pos, area.size)
         }
+
 
     }
 
@@ -141,7 +166,7 @@ export default class WhStoryBoard extends StoryBoard {
         for (let i = 0; i < containers.length; i++) {
             let c: ContainerInfo = containers[i]
             let areaInfo = DefaultStorage.areaLocMap.get(c.areaName)
-            if (areaInfo == null || areaInfo == undefined) {
+            if (areaInfo == null) {
                 continue
             }
 
@@ -194,24 +219,23 @@ export default class WhStoryBoard extends StoryBoard {
         DefaultStorage.stationMesh.set(s.name, b)
     }
 
-    // async loadBins(stations: Bin[]) {
-    //
-    //     for (let i = 0; i < stations.length; i++) {
-    //         let station = stations[i]
-    //         station.Build()
-    //         // 存储
-    //         DefaultStorage.stationMap.set(station.name, station)
-    //         this.loadBin(station)
-    //     }
-    // }
+    async loadGoodShelfs(goodShelfs: GoodsShelfInfo[]) {
+        for (let i = 0; i < goodShelfs.length; i++) {
+            let goodShelf = goodShelfs[i]
+            goodShelf.Build()
+            // 存储
+            // DefaultStorage.stationMap.set(station.name, station)
+            this.loadGoodShelf(goodShelf)
+        }
+    }
 
-    // loadBin(s: Bin) {
-    //     let b = new Bin(s.name, s.size.x, s.size.z, s.face)
-    //     b.mesh.position.set(s.pos.x, 1, s.pos.z)
-    //     this.add(b.mesh)
-    //
-    //     DefaultStorage.stationMesh.set(s.name, b)
-    // }
+    loadGoodShelf(s: GoodsShelfInfo) {
+        let b = new GoodShelf(s.name, s.size.x, s.size.z)
+        b.mesh.position.set(s.pos.x, 1, s.pos.z)
+        this.add(b.mesh)
+
+        // DefaultStorage.stationMesh.set(s.name, b)
+    }
 
     loadOthers() {
     }

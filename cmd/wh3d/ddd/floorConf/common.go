@@ -4,7 +4,9 @@ import "github.com/lishimeng/app-starter"
 
 // ReqSkuJson  请求封装dto
 type reqFloorConfJson struct {
-	Id int `json:"id"`
+	Id     int `json:"id"`
+	Width  int `json:"width"`
+	Height int `json:"height"`
 }
 
 type floorConfJson struct {
@@ -14,16 +16,6 @@ type floorConfJson struct {
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
 	Ctime  string `json:"ctime"`
-}
-
-type pos struct {
-	X int `json:"x"` // X轴坐标
-	Y int `json:"y"` // Y轴坐标
-	Z int `json:"z"` // Z轴坐标
-}
-type size struct {
-	W int `json:"w"` // 宽度
-	H int `json:"h"` // 长度
 }
 
 // RespLocationInfoJson  请求响应数据

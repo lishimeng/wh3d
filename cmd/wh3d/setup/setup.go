@@ -24,6 +24,7 @@ func Setup(ctx context.Context) (err error) {
 	han = append(han,
 		ws.Web,
 		process.AmqpStart,
+		ws.Te,
 	)
 	for _, h := range han {
 		err = h(ctx)

@@ -1,4 +1,4 @@
-package areaConf
+package floorConf
 
 import (
 	"github.com/beego/beego/v2/client/orm"
@@ -10,15 +10,14 @@ import (
 
 /**
 * @Author: Connor
-* @Date:   23.8.2 10:16
+* @Date:   23.8.1 14:22
 * @Description:
  */
 
-func areaConfPageListApi(ctx iris.Context) {
+func floorConfPageListApi(ctx iris.Context) {
 	var resp app.PagerResponse
 	resp.Code = common.RespCodeSuccess
 
-	area := ctx.URLParamDefault("area", "")
 	warehouseNo := ctx.URLParamDefault("warehouseNo", "")
 
 	var pageSize = ctx.URLParamIntDefault("pageSize", common.DefaultPageSize)
@@ -28,42 +27,35 @@ func areaConfPageListApi(ctx iris.Context) {
 		PageSize: pageSize,
 		PageNum:  pageNo,
 	}
-	list, err := listPage(warehouseNo, area, &page)
+	list, err := listPage(warehouseNo, &page)
 	if err != nil {
 		return
 	}
 
-	for _, container := range list {
+	for _, c := range list {
 
-		json := areaConfPcJson{
-			WarehouseId: container.WhId,
-			WarehouseNo: container.WhNo,
-			AreaNo:      container.No,
-			Id:          container.Id,
-			X:           container.PosX,
-			Y:           container.PosY,
-			Z:           container.PosZ,
-			Width:       container.Width,
-			Height:      container.Height,
+		json := floorConfJson{
+			Id:     c.Id,
+			WhNo:   c.WarehouseNo,
+			WhId:   c.WarehouseId,
+			Width:  c.Width,
+			Height: c.Height,
 		}
 		page.Data = append(page.Data, json)
 	}
 
 	resp.Pager = page
 	common.ResponseJSON(ctx, resp)
+
 }
 
-func listPage(warehouseNo, area string, page *app.Pager) (appInfos []model.AreaConf, err error) {
+func listPage(warehouseNo string, page *app.Pager) (appInfos []model.FloorConf, err error) {
 	//筛选项
 	cond := orm.NewCondition()
-	if len(area) > 0 {
-		cond = cond.And("No", area)
-	}
 	if len(warehouseNo) > 0 {
-		cond = cond.And("WhNo", warehouseNo)
+		cond = cond.And("warehouseNo", warehouseNo)
 	}
-
-	var qs = app.GetOrm().Context.QueryTable(new(model.AreaConf)).SetCond(cond)
+	var qs = app.GetOrm().Context.QueryTable(new(model.FloorConf)).SetCond(cond)
 	sum, err1 := qs.Count()
 
 	if err1 != nil {
@@ -73,7 +65,7 @@ func listPage(warehouseNo, area string, page *app.Pager) (appInfos []model.AreaC
 	page.TotalPage = common.CalcTotalPage(page, sum)
 	page.More = int(sum)
 
-	if _, err = qs.OrderBy("PosX", "PosY", "PosZ").Offset(common.CalcPageOffset(page)).Limit(page.PageSize).SetCond(cond).All(&appInfos); err != nil {
+	if _, err = qs.OrderBy("WarehouseNo").Offset(common.CalcPageOffset(page)).Limit(page.PageSize).SetCond(cond).All(&appInfos); err != nil {
 		return
 	}
 	return

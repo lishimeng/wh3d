@@ -1,4 +1,4 @@
-import { BoxGeometry, Group, Mesh, Sprite, SpriteMaterial, Texture } from "three";
+import {BoxGeometry, Color, Group, Mesh, MeshStandardMaterial, Sprite, SpriteMaterial, Texture} from "three";
 import { CubeImpl } from "../Cube";
 import { Layers } from "../Layers";
 import { DefaultMaterials } from "../Materials";
@@ -19,14 +19,15 @@ export class Area extends CubeImpl {
         this.name = name
         let mat = DefaultMaterials.get(Resources.Area)
         let geo = new BoxGeometry(width, 0.1, height)
+        // let mat = new MeshStandardMaterial({ color: new Color(0x363636) })
         let mesh: Mesh = new Mesh(geo, mat)
-        
+
         group.add(mesh)
 
         this.label = this.createLabel(name, idleColor)
         this.label.scale.set(0.5 * 100, 0.25 * 100, 0.75 * 100)
         this.label.position.set(0, 20, 0)
-        
+
         group.add(this.label)
 
         group.layers.set(Layers.Facility)
@@ -35,7 +36,7 @@ export class Area extends CubeImpl {
     }
 
     createLabel(content:string, color: string): Sprite {
-      
+
         var material = this.createLabelMaterial(content, color)
         var s = new Sprite(material)
         return s

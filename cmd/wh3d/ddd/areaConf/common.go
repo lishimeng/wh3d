@@ -4,7 +4,24 @@ import "github.com/lishimeng/app-starter"
 
 // ReqSkuJson  请求封装dto
 type reqAreaConfJson struct {
-	Id int `json:"id"`
+	X      int `json:"x"`
+	Y      int `json:"y"`
+	Z      int `json:"z"`
+	Width  int `json:"width"`
+	Height int `json:"height"`
+	Id     int `json:"id"`
+}
+
+type areaConfPcJson struct {
+	Id          int    `json:"id"`
+	AreaNo      string `json:"areaNo"`
+	WarehouseId int    `json:"warehouseId"`
+	WarehouseNo string `json:"warehouseNo"`
+	X           int    `json:"x"`
+	Y           int    `json:"y"`
+	Z           int    `json:"z"`
+	Width       int    `json:"width"`
+	Height      int    `json:"height"`
 }
 
 type areaConfJson struct {

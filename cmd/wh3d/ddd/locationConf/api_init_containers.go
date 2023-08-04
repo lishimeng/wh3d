@@ -31,9 +31,9 @@ func initContainersApi(ctx iris.Context) {
 	aoc := app.GetOrm().Context
 	containers := make([]view.InventoryContainerItemInfoView, 0)
 	_, err := aoc.QueryTable(new(view.InventoryContainerItemInfoView)).
-		//Offset(0).
-		//Limit(10).
 		Filter("dimension_area", area).
+		Filter("pos_x__gte", 0).
+		OrderBy("-PosX", "-PosY", "-PosZ").
 		All(&containers)
 	if err != nil {
 		resp.Code = tool.RespCodeError

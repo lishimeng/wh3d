@@ -27,18 +27,23 @@ const LoadData = async (sb: WhStoryBoard) => {
     }
     await sb.loadAreas(areas)
 
+    if (urlParams.id == 'A511') {
+        // 加载地面路标
+        await sb.loadRoads()
+    }
+
     console.log('开始加载发货站台')
     const {items: platformData} = await initPlatformsApi({"whNo": urlParams.id})
     let stations = []
-
-    for (let i = 0; i < platformData.length; i++) {
-        let data = platformData[i]
-        stations.push(new StationInfo(data.name).Pos(data.pos.x, data.pos.y).FaceTo(data.faceTo.x, data.faceTo.y, data.faceTo.z))
+    if (platformData && platformData.length > 0) {
+        for (let i = 0; i < platformData.length; i++) {
+            let data = platformData[i]
+            stations.push(new StationInfo(data.name).Pos(data.pos.x, data.pos.y).FaceTo(data.faceTo.x, data.faceTo.y, data.faceTo.z))
+        }
+        await sb.loadStations(stations)
     }
-    await sb.loadStations(stations)
 
     console.log('开始加载容器')
-
     await initData(sb, areaData, urlParams.id)
 
 
@@ -111,6 +116,8 @@ const LoadData = async (sb: WhStoryBoard) => {
     const url = genWsUrl()
     let ws = SocketService.Instance
     ws.url = url
+
+    console.log(url)
 
     ws.onmessage = async (msg) => {
         // console.log(msg)

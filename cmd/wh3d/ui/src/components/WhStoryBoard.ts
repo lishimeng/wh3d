@@ -119,6 +119,16 @@ export default class WhStoryBoard extends StoryBoard {
 
     async loadAreas(areas: AreaInfo[]): Promise<void> {
 
+        for (let i = 0; i < areas.length; i++) {
+            let area = areas[i]
+            area.Build()
+            // 存储
+            DefaultStorage.areaLocMap.set(area.name, area)
+            this.loadArea(area.name, area.pos, area.size)
+        }
+    }
+
+    async loadRoads(){
         // 加载地面箭头
         DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
 
@@ -127,29 +137,190 @@ export default class WhStoryBoard extends StoryBoard {
             let floorMat = new MeshBasicMaterial({
                 map: texture
             });
-            // console.log("==============>floorMat",floorMat)
-            // let mesh = new Mesh(geo, floorMat)
-            // mesh.position.set(-12, 0, 6)
-            // this.add(mesh)
-            // const binMat: MeshStandardMaterial = new MeshStandardMaterial({color: 0xFF0000});
 
-            const binLineGeo: PlaneGeometry = new PlaneGeometry(100, 6)
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
             let mesh = new Mesh(binLineGeo, floorMat)
             let rotation = Math.PI / 2
-            mesh.position.set(-12, 0, 6)
+            mesh.position.set(-65, 0, 20)
             mesh.rotation.set(-rotation, 0, -rotation * 2)
             this.add(mesh)
         })
 
-        for (let i = 0; i < areas.length; i++) {
-            let area = areas[i]
-            area.Build()
-            // 存储
-            DefaultStorage.areaLocMap.set(area.name, area)
-            this.loadArea(area.name, area.pos, area.size)
-        }
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
 
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
 
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(-65, 0, -15)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(-15, 0, 20)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(-15, 0, -15)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(35, 0, 20)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(35, 0, -15)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(85, 0, 20)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(85, 0, -15)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(135, 0, 20)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(135, 0, -15)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(185, 0, 20)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
+
+        DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
+
+            texture.wrapS = texture.wrapT = RepeatWrapping;
+            texture.repeat.set(1, 1);
+            let floorMat = new MeshBasicMaterial({
+                map: texture
+            });
+
+            const binLineGeo: PlaneGeometry = new PlaneGeometry(30, 5)
+            let mesh = new Mesh(binLineGeo, floorMat)
+            let rotation = Math.PI / 2
+            mesh.position.set(185, 0, -15)
+            mesh.rotation.set(-rotation, 0, -rotation * 2)
+            this.add(mesh)
+        })
     }
 
     loadArea(name: string, pos: Vector3, size: Vector3) {

@@ -5,6 +5,7 @@ import {GetRequest, initAreaByNoApi, initContainersByAreaApi, initPlatformsApi} 
 import SocketService from "./SocketService";
 import {DefaultStorage} from "../sdk/Storage";
 import {Station} from "../sdk/models/Station";
+import {DynamicDisplayInventoryHandler, EventData} from "./DynamicDisplayInventoryHandler";
 
 const api = '/subscribe'
 
@@ -101,168 +102,32 @@ const LoadData = async (sb: WhStoryBoard) => {
     // }
     // await sb.loadContainers(containers)
 
-    setInterval(() => {
-        // TODO 更新每个area的托盘变动，或启动websocket监听托盘变动
-        // 连接 WebSocket service
-
-    }, 1000)
+    // setInterval(() => {
+    //     // TODO 更新每个area的托盘变动，或启动websocket监听托盘变动
+    //     // 连接 WebSocket service
+    //
+    // }, 1000)
 
     const url = genWsUrl()
     let ws = SocketService.Instance
     ws.url = url
 
-    ws.onmessage = (msg) => {
+    ws.onmessage = async (msg) => {
         // console.log(msg)
+        // debugger
         if (msg == undefined || msg.data == undefined) {
             return
         }
         // console.log(msg)
-        let d = JSON.parse(msg.data)
-        // console.log(d)
 
-        //
-        dynamicDisplayInventory(sb, d)
+        let d: EventData = JSON.parse(msg.data)
+        console.log(d)
+        // 创建-事件处理器，调用公开方法
+        await (new DynamicDisplayInventoryHandler()).Handle(d, sb)
     }
-
+    // 连接 ws
     ws.connect()
-
-
-    // setInterval(() => {
-    //     // TODO 更新每个站台状态变动
-    // }, 1000)
-
-    // await test(sb)
 }
-
-class DataModel {
-    dataType: string // 数据类型
-    payload: any // 数据内容
-
-}
-
-const a: Map<string, any> = new Map() // 站台
-
-a["station"] = (payload: any) => {
-
-}
-a["container_in"] = (payload: any) =>{
-
-}
-
-
-class DynamicDisplayWSData {
-    // 站台
-    stationNo: string
-    currNum: number
-    totalNum: number
-    stationType: number
-
-// 托盘
-    containerNo: string
-    // 入库托盘参数
-    posX: number
-    posY: number
-    posZ: number
-}
-
-// 动态删除托盘
-const dynamicDisplayInventory = async (sb: WhStoryBoard, data: DynamicDisplayWSData): Promise<void> => {
-    console.log("==========>", data)
-    // 1 出库
-    // 2 入库
-    const {stationNo, stationType, currNum, totalNum, containerNo, posX, posY, posZ} = data
-
-
-    let station = DefaultStorage.stationMesh.get(stationNo);
-    let rate = Math.floor(currNum / totalNum * 100)
-
-    if (stationType == 1) {
-        station!.statusWork(`装车中... %${rate}`)
-
-        console.log(containerNo)
-        // 删除托盘
-        sb.removeContainer(containerNo)
-
-        if (rate == 100) {
-            station?.statusIdle()
-        }
-    } else {
-        station!.statusWork(`卸货中... %${rate}`)
-
-        let c = new ContainerInfo(containerNo, "PX01").Pos(posX, posY, posZ)
-        c.Build()
-        sb.loadContainer(c)
-        // 添加托盘
-    }
-
-
-    // let arr = [
-    //     "Z-0511F",
-    //     "Z-0511E",
-    //     "Z-0511D",
-    //     "Z-0511C",
-    //     "Z-0511B",
-    //     "Z-0511A",
-    //     "No.7[IN]",
-    //     "No.2[IN]",
-    // ]
-    //
-    // let containers =  [
-    //         "030100041942",
-    //         "030100014441",
-    //         "030100041198",
-    //         "030100041201",
-    //         "030100041204",
-    //         "030100041212",
-    //         "030100041214",
-    //         "030100041215",
-    //         "030100041207",
-    //         "030100041209",
-    //         "030100041229",
-    //         "030100041222",
-    //         "030100041226",
-    //         "030100041234",
-    //         "030100041238",
-    //         "030100041245",
-    //         "030100041247",
-    //         "030100041240",
-    //         "030100041244",
-    //         "030100041200",
-    //         "030100041211",
-    //         "030100041217",
-    //         "030100041230",
-    //         "030100041231",
-    //         "030100041224",
-    //         "030100041227",
-    //         "030100041248",
-    //         "030100041242",
-    //         "030100041249",
-    //         "030100041250"
-    //     ]
-    //
-    //
-    // var no = DefaultStorage.stationMesh.get("Z-0511F");
-    //
-    // let crr = 1;
-    // let total = 30;
-    // setInterval(() => {
-    //     let rate = Math.floor(crr / total * 100)
-    //     no!.statusWork(`装车中... %${rate}`)
-    //     // 删除托盘
-    //     sb.removeContainer(containers[crr - 1])
-    //     crr++
-    //     if (crr > total) {
-    //         no!.statusIdle()
-    //         return
-    //     }
-    // }, 1000)
-}
-
-// function randomNum(max, min) {
-//     const num = Math.floor(Math.random() * (max - min + 1)) + min
-//     return num
-// }
-
 
 /**
  * 初始化数据

@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.37",
-    "three": "^0.144.0",
-    "dat.gui": "^0.7.9",
+    "@types/node": "^16.11.6",
     "axios": "^0.24.0",
-    "@types/node": "^16.11.6"
+    "dat.gui": "^0.7.9",
+    "less": "^4.2.0",
+    "sass": "^1.64.2",
+    "three": "^0.144.0",
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.0",

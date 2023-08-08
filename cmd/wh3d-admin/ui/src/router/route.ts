@@ -2,6 +2,7 @@ import {RouteRecordRaw} from 'vue-router';
 import locationRouter from './loactioncof';
 import areaRouter from './areaconf';
 import floorRouter from './floorconf';
+import stationRouter from './stationconf';
 
 const baseRoutes = [{
     path: '/home',
@@ -22,6 +23,7 @@ const routes = baseRoutes.concat(
     locationRouter,
     areaRouter,
     floorRouter,
+    stationRouter,
 );
 
 /**

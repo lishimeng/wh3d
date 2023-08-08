@@ -6,4 +6,7 @@ import (
 
 func Router(p iris.Party) {
 	p.Get("/", apiList)
+	p.Get("/pc", stationConfPageListApi)
+
+	p.Put("/", stationConfEditApi)
 }

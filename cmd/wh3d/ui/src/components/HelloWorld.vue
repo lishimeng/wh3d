@@ -5,6 +5,7 @@ import {DefaultLoadingManager} from 'three';
 import {DefaultMaterials} from '../sdk/Materials';
 import WhStoryBoard from './WhStoryBoard';
 
+import navigationBar from './navigationBar.vue'
 import LoadData from './WhDataLoader';
 import {Percent} from './Util';
 
@@ -71,6 +72,8 @@ function setMask() {//设置遮罩层
 
 <template>
   <div class="gui"></div>
+  <!--  导航栏组件-->
+  <navigationBar/>
 </template>
 
 <style scoped>

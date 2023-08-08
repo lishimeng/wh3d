@@ -18,9 +18,13 @@ type PlatformConf struct {
 	PosZ int
 
 	// 朝向
-	FaceToX       float64
-	FaceToY       float64
-	FaceToZ       float64
+	FaceToX float64
+	FaceToY float64
+	FaceToZ float64
+
+	WarehouseNo string // 所属仓库
+	WarehouseId int    // 所属仓库
+
 	DimensionArea string // 所属区域
 }
 

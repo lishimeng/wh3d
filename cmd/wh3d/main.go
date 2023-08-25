@@ -59,7 +59,7 @@ func _main() (err error) {
 
 		builder.
 			PrintVersion().
-			EnableWeb(":82", setup.Route).
+			EnableWeb(etc.Config.Web.Listen, setup.Route).
 			EnableDatabase(dbConfig.Build(),
 				db.RegisterTables()...).
 			EnableStaticWeb(func() http.FileSystem {

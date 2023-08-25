@@ -15,7 +15,7 @@ export default defineConfig({
     base: "./",
     server: {
         host: '0.0.0.0',
-        port: 5173,
+        port: 5174,
         open: false,
         proxy: {
             '/main/3d': {

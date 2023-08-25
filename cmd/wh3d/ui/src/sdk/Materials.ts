@@ -1,6 +1,6 @@
-import { Group, Material, MeshBasicMaterial, RepeatWrapping } from "three"
-import { Resources } from "./Resources"
-import { DefaultLoader } from "./Loader"
+import {Group, Material, MeshBasicMaterial, RepeatWrapping} from "three"
+import {Resources} from "./Resources"
+import {DefaultLoader} from "./Loader"
 
 class Materials {
 
@@ -53,14 +53,14 @@ class Materials {
 
         console.log('加载区域贴图')
         DefaultLoader.loadTexture(Resources.Area, "./images/plane.png", (texture) => {
-            let mat = new MeshBasicMaterial({ map: texture, transparent: true, opacity: 0.8 })
+            let mat = new MeshBasicMaterial({map: texture, transparent: true, opacity: 0.8})
             mat.needsUpdate = true
             this.map.set(Resources.Area, mat)
         })
 
         console.log('加载货架贴图')
         DefaultLoader.loadTexture(Resources.Area, "./images/rack.png", (texture) => {
-            let mat = new MeshBasicMaterial({ map: texture, transparent: true, opacity: 0.8 })
+            let mat = new MeshBasicMaterial({map: texture, transparent: true, opacity: 0.8})
             mat.needsUpdate = true
             this.map.set(Resources.Shift, mat)
         })
@@ -74,22 +74,22 @@ class Materials {
         let goods2Url = "./images/container/crate3.png"
 
         DefaultLoader.loadTexture(Resources.Goods, goodsUrl, (texture) => {
-            let goodsMat = new MeshBasicMaterial({ map: texture })
+            let goodsMat = new MeshBasicMaterial({map: texture})
             this.map.set(Resources.Goods, goodsMat)
         })
 
         DefaultLoader.loadTexture(Resources.Goods0, goods0Url, (texture) => {
-            let goodsMat = new MeshBasicMaterial({ map: texture })
+            let goodsMat = new MeshBasicMaterial({map: texture})
             this.map.set(Resources.Goods0, goodsMat)
         })
 
         DefaultLoader.loadTexture(Resources.Goods1, goods1Url, (texture) => {
-            let goodsMat = new MeshBasicMaterial({ map: texture })
+            let goodsMat = new MeshBasicMaterial({map: texture})
             this.map.set(Resources.Goods1, goodsMat)
         })
 
         DefaultLoader.loadTexture(Resources.Goods2, goods2Url, (texture) => {
-            let goodsMat = new MeshBasicMaterial({ map: texture })
+            let goodsMat = new MeshBasicMaterial({map: texture})
             this.map.set(Resources.Goods2, goodsMat)
         })
 
@@ -99,6 +99,12 @@ class Materials {
 
         DefaultLoader.loadGltf(Resources.ModuleTruck, truckUrl, (module) => {
             this.modules.set(Resources.ModuleTruck, module)
+        })
+
+        // 加载货架模型
+        DefaultLoader.loadGltf(Resources.MoudleGoodsShelf, "./modules/goodsshelf/scene.gltf", (module) => {
+            console.log("goodsshelf",module)
+            this.modules.set(Resources.MoudleGoodsShelf, module)
         })
     }
 }

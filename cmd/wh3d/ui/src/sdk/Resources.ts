@@ -2,6 +2,7 @@ export enum Resources {
 
 
     ModuleTruck = 'truck',
+    MoudleGoodsShelf = 'goodsshelf',
 
     TTFKenpixel = 'kenpixel',
     Area = "area",

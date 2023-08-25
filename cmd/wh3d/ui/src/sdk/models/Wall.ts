@@ -1,7 +1,7 @@
-import { BoxGeometry, Mesh, MeshPhongMaterial, Vector3 } from "three";
+import {BoxGeometry, Mesh, MeshBasicMaterial, MeshPhongMaterial, Vector3} from "three";
 import Config from "../Config";
-import { CubeImpl } from "../Cube";
-import { Layers } from "../Layers";
+import {CubeImpl} from "../Cube";
+import {Layers} from "../Layers";
 
 const binWidth: number = Config.Global.UnitLegth
 const binHeight: number = 1.0
@@ -20,6 +20,8 @@ export class Wall extends CubeImpl {
     constructor(size: Vector3) {
         let geo: BoxGeometry = new BoxGeometry(size.x, size.y, size.z)
         let mesh: Mesh = new Mesh(geo, mat)
+        // 透明层
+        // mesh.material = new MeshBasicMaterial({transparent: true, opacity: 0.5})
         mesh.layers.set(Layers.Environment)
         super(mesh)
     }

@@ -116,14 +116,11 @@ class ContainerInfo extends Module {
         // let x = this.areaTile.x + this.tileRelative.x
         // let y = this.areaTile.y + this.tileRelative.y
         // let z = this.areaTile.z + this.tileRelative.z
+
         let x = this.tileRelative.x
         let y = this.tileRelative.y
         let z = this.tileRelative.z
         this.tile.set(x, y, z)
-
-        // if (this.areaName == 'PX04') {
-        //     console.log(this.areaTile, this.tileRelative)
-        // }
 
         // 计算大小, 固定, 占用一个单位
         this.tileSize.set(1, 1, 1)

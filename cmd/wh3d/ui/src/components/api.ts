@@ -1,4 +1,5 @@
 import {get} from './request'
+import {vary} from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
 const baseURL = 'main'
 
@@ -12,16 +13,18 @@ export const initAreaByNoApi = (p: any) => get(baseURL + "/3d/areaconf", p)
 export const initPlatformsApi = (p: any) => get(baseURL + "/3d/platformconf", p)
 
 // 加载地板
-export const initfloorconfApi = (p) => get(baseURL + "/3d/floorconf", p)
+export const initfloorconfApi = (p:any) => get(baseURL + "/3d/floorconf", p)
 
-export function GetRequest() {
+export function GetRequest():Map<string,string> {
     var url = location.search; //获取url中"?"符后的字串
-    var theRequest = new Object();
+    var theRequest: Map<string, string> = new Map()
     if (url.indexOf("?") != -1) {
         var str = url.substr(1);
         let strs = str.split("&");
-        for (var i = 0; i < strs.length; i++) {
-            theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+        for (let i = 0; i < strs.length; i++) {
+            let kv = str[i].split("=")
+            theRequest.set(kv[0], kv[1])
+            //theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
         }
     }
     return theRequest;

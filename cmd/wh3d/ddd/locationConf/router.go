@@ -17,4 +17,9 @@ func Router(p iris.Party) {
 
 	// 修改库位对应的库位X、RelY、Z配置信息
 	p.Post("/update/location/conf", locationConfEdit)
+
+	// 初始化配置库
+	//p.Get("/initlocation", initLocationForA511)
+
+	p.Get("/initlocation/a610", initLocationForA610)
 }

@@ -37,6 +37,7 @@ func apiListFor3D(ctx iris.Context) {
 			json := areaConfJson{
 				Id:   item.Id,
 				WhNo: item.WhNo,
+				WhId: item.WhId,
 				No:   item.No,
 				pos: pos{
 					X: item.PosX,

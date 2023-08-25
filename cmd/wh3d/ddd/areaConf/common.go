@@ -27,6 +27,7 @@ type areaConfPcJson struct {
 type areaConfJson struct {
 	Id    int    `json:"id"`
 	WhNo  string `json:"whNo"` // 所属仓库-A511/A610/...
+	WhId  int    `json:"whId"`
 	No    string `json:"name"` // 区域名称
 	pos   `json:"pos"`
 	size  `json:"size"`

@@ -8,8 +8,10 @@ import (
 	"github.com/lishimeng/app-starter/persistence"
 	"github.com/lishimeng/go-log"
 	"github.com/lishimeng/wh3d/cmd/wh3d/setup"
+	"github.com/lishimeng/wh3d/cmd/wh3d/static"
 	"github.com/lishimeng/wh3d/internal/db"
 	"github.com/lishimeng/wh3d/internal/etc"
+	"net/http"
 	"time"
 )
 import _ "github.com/lib/pq"
@@ -60,6 +62,9 @@ func _main() (err error) {
 			EnableWeb(":82", setup.Route).
 			EnableDatabase(dbConfig.Build(),
 				db.RegisterTables()...).
+			EnableStaticWeb(func() http.FileSystem {
+				return http.FS(static.Static)
+			}).
 			ComponentAfter(setup.Setup)
 		return err
 	}, func(s string) {

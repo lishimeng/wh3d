@@ -26,7 +26,7 @@ export class Area extends CubeImpl {
 
         this.label = this.createLabel(name, idleColor)
         this.label.scale.set(0.5 * 100, 0.25 * 100, 0.75 * 100)
-        this.label.position.set(0, 20, 0)
+        this.label.position.set(0, 25, 0)
 
         group.add(this.label)
 

@@ -90,3 +90,152 @@ func calculatePositionYZX(conf *model.LocationConf, reqJson *locationConfJson, a
 
 	conf.AreaConfId = areaConf.Id
 }
+
+type location struct {
+	WarehouseId int
+	WarehouseNo string
+	LocationId  int
+	LocationNo  string
+	Dimensions  string
+	Area        string
+	Group       int
+	X           int
+	Z           int
+	Y           int
+}
+
+func initLocationForA511(ctx iris.Context) {
+	var resp respLocationConfJson
+	resp.Code = tool.RespCodeSuccess
+
+	locations := make([]location, 0)
+	aoc := app.GetOrm().Context
+
+	_, err := aoc.Raw(`SELECT
+	container_no,
+	warehouse_id,
+	warehouse_no,
+	location_id,
+	location_no,
+	dimensions,
+	area,
+	SPLIT_PART( dimensions, '-', 1 ) AS x,
+	SPLIT_PART( dimensions, '-', 3 ) AS z,
+	SPLIT_PART( dimensions, '-', 2 ) AS y 
+FROM
+	inventory_container_item_info_view 
+WHERE
+	warehouse_id = 1 
+	AND dimensions IS NOT NULL 
+ORDER BY
+	"group"`).QueryRows(&locations)
+	if err != nil {
+		log.Info(err)
+	}
+
+	for _, item := range locations {
+		// 创建每一个库位配置，并计算对决定位
+		conf := model.AreaConf{}
+		conf.No = item.Area
+		conf.WhId = item.WarehouseId
+		err := aoc.Read(&conf, "No", "WhId")
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+
+		// 计算绝对坐标
+		x := item.X + conf.PosX
+		y := item.Y + conf.PosY
+		z := item.Z + conf.PosZ
+
+		locationConf := model.LocationConf{
+			LocationId:  item.LocationId,
+			WarehouseId: item.WarehouseId,
+			AreaConfId:  item.WarehouseId,
+			Area:        item.Area,
+			RelX:        item.X,
+			RelZ:        item.Z,
+			RelY:        item.Y,
+			PosX:        x,
+			PosZ:        z,
+			PosY:        y,
+		}
+		_, err = aoc.Insert(&locationConf)
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+	}
+
+	tool.ResponseJSON(ctx, resp)
+}
+
+func initLocationForA610(ctx iris.Context) {
+	var resp respLocationConfJson
+	resp.Code = tool.RespCodeSuccess
+
+	area := ctx.URLParamDefault("area", "")
+	tempZ := ctx.URLParamIntDefault("tempZ", 0)
+	tempX := ctx.URLParamIntDefault("tempX", 0)
+
+	locations := make([]location, 0)
+	aoc := app.GetOrm().Context
+
+	_, err := aoc.Raw(`SELECT
+	warehouse_id,
+	warehouse_no,
+	ID AS location_id,
+	location_no,
+	description AS area,
+	"order" AS x,
+	layer AS y,
+	"group"
+FROM
+	location_info 
+WHERE
+	warehouse_id = 4 
+	AND description = ?`, area).QueryRows(&locations)
+	if err != nil {
+		log.Info(err)
+	}
+
+	for _, item := range locations {
+		// 创建每一个库位配置，并计算定位
+		conf := model.AreaConf{}
+		conf.No = "H"
+		conf.WhId = item.WarehouseId
+		err := aoc.Read(&conf, "No", "WhId")
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+
+		// 计算绝对坐标
+		//x := item.X + 20 + conf.PosX
+
+		x := item.X + tempX + conf.PosX
+		y := item.Y + conf.PosY
+		z := tempZ + conf.PosZ
+
+		locationConf := model.LocationConf{
+			LocationId:  item.LocationId,
+			WarehouseId: item.WarehouseId,
+			AreaConfId:  item.WarehouseId,
+			Area:        "H",
+			RelX:        item.X,
+			RelZ:        tempZ,
+			RelY:        item.Y,
+			PosX:        x,
+			PosZ:        z,
+			PosY:        y,
+		}
+		_, err = aoc.Insert(&locationConf)
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+	}
+
+	tool.ResponseJSON(ctx, resp)
+}

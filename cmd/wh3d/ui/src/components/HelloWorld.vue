@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {getCurrentInstance, nextTick, onMounted, onMounted, ref} from "vue";
 import {WorldImpl} from '../sdk/World'
 import {DefaultLoadingManager} from 'three';
 import {DefaultMaterials} from '../sdk/Materials';
 import WhStoryBoard from './WhStoryBoard';
+import LoadData from './WhDataLoader';
+
+import * as echarts from 'echarts'
+
+const {proxy} = getCurrentInstance() as any;
 
 import navigationBar from './navigationBar.vue'
 import LoadData from './WhDataLoader';
@@ -45,6 +50,7 @@ onMounted(() => {
   DefaultMaterials.init()
   // setMask()
 })
+
 
 function setMask() {//设置遮罩层
   var mask = document.createElement('div');

@@ -9,14 +9,14 @@ import {DynamicDisplayInventoryHandler, EventData} from "./DynamicDisplayInvento
 
 const api = '/subscribe'
 
-
 const LoadData = async (sb: WhStoryBoard) => {
     console.log('开始加载区域框')
     // url参数
     let urlParams = GetRequest();
     console.log(urlParams)
 
-    const {items: areaData} = await initAreaByNoApi({"whNo": urlParams.id})
+    // @ts-ignore
+    const {items: areaData} = await initAreaByNoApi({"whNo": urlParams['id']})
     let areas = []
     if (!areaData || areaData.length == 0) {
         return
@@ -27,12 +27,16 @@ const LoadData = async (sb: WhStoryBoard) => {
     }
     await sb.loadAreas(areas)
 
+    // @ts-ignore
     if (urlParams.id == 'A511') {
         // 加载地面路标
         await sb.loadRoads()
     }
 
     console.log('开始加载发货站台')
+
+    let id = urlParams.get("id")
+    const {items: platformData} = await initPlatformsApi({"whNo": id})
     const {items: platformData} = await initPlatformsApi({"whNo": urlParams.id})
     let stations = []
     if (platformData && platformData.length > 0) {
@@ -44,10 +48,12 @@ const LoadData = async (sb: WhStoryBoard) => {
     }
 
     console.log('开始加载容器')
+    // @ts-ignore
     await initData(sb, areaData, urlParams.id)
 
 
     // 加载货架
+
     // let goodshelfs: GoodsShelfInfo[] = []
     // goodshelfs.push(
     //     new GoodsShelfInfo("H").Pos(1, 0).Size(20, 3),
@@ -91,7 +97,7 @@ const LoadData = async (sb: WhStoryBoard) => {
     //     new GoodsShelfInfo("302").Pos(39, 49).Size(20, 3),
     //     new GoodsShelfInfo("301").Pos(39, 52).Size(20, 3),
     // )
-    //
+
     // await sb.loadGoodShelfs(goodshelfs)
 
     // 加载BIN
@@ -113,6 +119,40 @@ const LoadData = async (sb: WhStoryBoard) => {
     //
     // }, 1000)
 
+    // await sb.LoadShelves({})
+    // await sb.LoadShelves({
+    //     name: '存储区1',
+    //     width: 8, // 长
+    //     depth: 8, // 宽
+    //     // 三维位置信息
+    //     position: {
+    //         x: -1,
+    //         y: 0.1,
+    //         z: -1
+    //     },
+    //     // 存储区上的货架参数
+    //     shelves: {
+    //         name: '货架1',
+    //         rowNum: 2, // 层数
+    //         columnNum: 4, // 列数
+    //         width: 10, // 每格宽
+    //         height: 10, // 每格高
+    //         depth: 10, // 每格深
+    //         x: 0,
+    //         y: 1,
+    //         z: 0,
+    //         container: {
+    //           name: '1',
+    //           width: 2,
+    //           height: 2,
+    //           depth: 2,
+    //           x: -12,
+    //           y: 1,
+    //           z: -1,
+    //         }
+    //     }
+    // })
+    return;
     const url = genWsUrl()
     let ws = SocketService.Instance
     ws.url = url
@@ -139,12 +179,12 @@ const LoadData = async (sb: WhStoryBoard) => {
 /**
  * 初始化数据
  */
-const initData = async (sb: WhStoryBoard, areas, wh) => {
+const initData = async (sb: WhStoryBoard, areas: any, wh: any) => {
     // 循环每个区域
     for (let i = 0; i < areas.length; i++) {
         // 初始化区域的托盘信息s
         // if (i > 0) {break}
-        initAreaContainers(sb, areas[i].name, wh)
+        initAreaContainers(sb, areas[i].name, areas[i].whId, wh)
     }
 
 }
@@ -152,9 +192,9 @@ const initData = async (sb: WhStoryBoard, areas, wh) => {
 /**
  * 接口: 初始化区域托盘
  */
-const initAreaContainers = (sb: WhStoryBoard, areaName: string, whNo: string) => {
+const initAreaContainers = (sb: WhStoryBoard, areaName: string, warehouseId: number, whNo: string) => {
     initContainersByAreaApi({
-        bu: whNo,
+        warehouseId:warehouseId,
         area: areaName,
         deptId: 1,
         orgId: 1,

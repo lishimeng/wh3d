@@ -157,8 +157,8 @@ export default class WhStoryBoard extends StoryBoard {
             this.loadArea(area.name, area.pos, area.size)
         }
     }
-    async loadRoads() {
 
+    async loadRoads() {
         // 加载地面箭头
         DefaultLoader.loadTexture(Resources.Road, "./images/roll.png", (texture) => {
 

@@ -3,8 +3,6 @@ import {AreaInfo, ContainerInfo, StationInfo} from '../sdk/Data';
 
 import {GetRequest, initAreaByNoApi, initContainersByAreaApi, initPlatformsApi} from './api'
 import SocketService from "./SocketService";
-import {DefaultStorage} from "../sdk/Storage";
-import {Station} from "../sdk/models/Station";
 import {DynamicDisplayInventoryHandler, EventData} from "./DynamicDisplayInventoryHandler";
 
 const api = '/subscribe'
@@ -37,7 +35,6 @@ const LoadData = async (sb: WhStoryBoard) => {
 
     let id = urlParams.get("id")
     const {items: platformData} = await initPlatformsApi({"whNo": id})
-    const {items: platformData} = await initPlatformsApi({"whNo": urlParams.id})
     let stations = []
     if (platformData && platformData.length > 0) {
         for (let i = 0; i < platformData.length; i++) {
@@ -48,6 +45,7 @@ const LoadData = async (sb: WhStoryBoard) => {
     }
 
     console.log('开始加载容器')
+
     // @ts-ignore
     await initData(sb, areaData, urlParams.id)
 

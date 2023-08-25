@@ -51,12 +51,10 @@ push_image(){
 build_all(){
   checkout_tag
   build_image 'wh3d' 'cmd/wh3d'
-  build_image 'wh3d-admin' 'cmd/wh3d-admin'
 }
 
 push_all(){
   push_image 'wh3d'
-  push_image 'wh3d-admin'
 }
 
 case  $1 in

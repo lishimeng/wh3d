@@ -12,11 +12,11 @@ func main() {
 			AppPath: "cmd/wh3d",
 			HasUI:   true,
 		},
-		buildscript.Application{
-			Name:    "wh3d-admin",
-			AppPath: "cmd/wh3d-admin",
-			HasUI:   true,
-		},
+		//buildscript.Application{
+		//	Name:    "wh3d-admin",
+		//	AppPath: "cmd/wh3d-admin",
+		//	HasUI:   true,
+		//},
 	)
 	if err != nil {
 		fmt.Println(err)

@@ -6,10 +6,12 @@ import (
 	"github.com/lishimeng/wh3d/cmd/wh3d/ddd/floorConf"
 	"github.com/lishimeng/wh3d/cmd/wh3d/ddd/locationConf"
 	"github.com/lishimeng/wh3d/cmd/wh3d/ddd/platformConf"
+	"github.com/lishimeng/wh3d/cmd/wh3d/ws"
 )
 
 func Route(app *iris.Application) {
 	root := app.Party("/api")
+	app.Get("/subscribe", ws.Subscribe) // websocket
 	router(root)
 	return
 }

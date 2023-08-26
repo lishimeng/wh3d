@@ -5,33 +5,31 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/kataras/iris/v12"
 	"github.com/lishimeng/app-starter"
 	"github.com/lishimeng/go-log"
 	"github.com/lishimeng/wh3d/internal/db/view"
-	"github.com/lishimeng/wh3d/internal/etc"
-	"net/http"
 	"time"
 )
 
-func subscribe(w http.ResponseWriter, r *http.Request) {
+func Subscribe(ctx iris.Context) {
 
 	var id = fmt.Sprintf("c%d", time.Now().Nanosecond())
 	var roomName = "" // 每个组织一个Room
-	q := r.URL.Query()
-	if values, ok := q["id"]; ok {
-		roomName = values[0] // 此处是区分每个组织
-	} else {
+	roomName = ctx.URLParam("id")
+
+	if len(roomName) <= 0 {
 		log.Info("unknown room")
 		return
 	}
 
-	if !websocket.IsWebSocketUpgrade(r) {
+	if !websocket.IsWebSocketUpgrade(ctx.Request()) {
 		return
 	}
 
 	log.Info("id: %s", id)
 	// 完成和Client HTTP >>> WebSocket的协议升级
-	c, err := upgrader.Upgrade(w, r, nil)
+	c, err := upgrader.Upgrade(ctx.ResponseWriter(), ctx.Request(), nil)
 	if err != nil {
 		log.Info("upgrade:", err)
 		return
@@ -51,18 +49,6 @@ func subscribe(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Info("recv: %s", message)
 	}
-}
-
-func Web(_ context.Context) (err error) {
-	go func() {
-		log.Info("websocket start")
-		mux := http.NewServeMux()
-		mux.HandleFunc("/subscribe", subscribe)
-		//mux.Handle("/", http.FileServer(http.FS(static.Static)))
-		log.Info(http.ListenAndServe(etc.Config.Web.Listen, mux))
-	}()
-
-	return
 }
 
 func Te(_ context.Context) (err error) {

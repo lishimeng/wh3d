@@ -2,7 +2,6 @@ package setup
 
 import (
 	"context"
-	"github.com/lishimeng/wh3d/internal/ws"
 	"time"
 )
 
@@ -20,11 +19,9 @@ func Setup(ctx context.Context) (err error) {
 	time.Sleep(time.Second)
 
 	var han []componentHandler
-	han = append(han,
-		ws.Web,
-		//process.AmqpStart,
-		//ws.Te,
-	)
+	han = append(han) //process.AmqpStart,
+	//ws.Te,
+
 	for _, h := range han {
 		err = h(ctx)
 		if err != nil {

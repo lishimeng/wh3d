@@ -1,7 +1,6 @@
 import {get} from './request'
-import {vary} from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
-const baseURL = 'main'
+const baseURL = 'api'
 
 // 3d数据：初始化托盘信息
 export const initContainersByAreaApi = (p: any) => get(baseURL + "/3d/locationconf/initContainers", p)

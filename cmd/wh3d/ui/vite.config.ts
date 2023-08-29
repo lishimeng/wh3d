@@ -18,15 +18,15 @@ export default defineConfig({
         port: 5174,
         open: false,
         proxy: {
-            '/main/3d': {
+            '/api/3d': {
                 // target: 'http://ows.thingplecloud.com:82', // 测试环境
-                target: 'http://localhost:82/', // 本地环境
+                target: 'http://localhost:81/', // 本地环境
                 ws: true,
                 changeOrigin: true,
                 // rewrite: (path) => path.replace(/^\/main\/3d/, '/api'), // 本地环境
-                rewrite: (path: string) => {
-                    return path.replace(/^\/main/, '/api')
-                }
+                // rewrite: (path: string) => {
+                // return path.replace(/^\/main/, '/api')
+                // }
             },
             '/subscribe': {
                 target: 'http://localhost:81/', // 本地环境

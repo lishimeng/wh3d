@@ -54,7 +54,7 @@ export default class WhStoryBoard extends StoryBoard {
         let urlParams = GetRequest();
 
         const {items: items, code: code} = await initfloorconfApi({
-            whNo: urlParams.id
+            whNo: urlParams.get("id")
         })
         // console.log(items, code)
         if (code != 200) {

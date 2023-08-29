@@ -12,10 +12,12 @@ export const initAreaByNoApi = (p: any) => get(baseURL + "/3d/areaconf", p)
 export const initPlatformsApi = (p: any) => get(baseURL + "/3d/platformconf", p)
 
 // 加载地板
-export const initfloorconfApi = (p:any) => get(baseURL + "/3d/floorconf", p)
+export const initfloorconfApi = (p: any) => get(baseURL + "/3d/floorconf", p)
 
-export function GetRequest():Map<string,string> {
+export function GetRequest(): Map<string, string> {
     var url = location.search; //获取url中"?"符后的字串
+    console.log('location.search', url)
+
     var theRequest: Map<string, string> = new Map()
     if (url.indexOf("?") != -1) {
         var str = url.substr(1);
@@ -26,5 +28,6 @@ export function GetRequest():Map<string,string> {
             //theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
         }
     }
+    console.log('theRequest', theRequest)
     return theRequest;
 }

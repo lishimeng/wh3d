@@ -20,7 +20,7 @@ func Setup(ctx context.Context) (err error) {
 
 	var han []componentHandler
 	han = append(han) //process.AmqpStart,
-	//ws.Te,
+	// TODO ws.Te, 测试webscoket 通信页面，后续修改为 mq通信消息到页面
 
 	for _, h := range han {
 		err = h(ctx)

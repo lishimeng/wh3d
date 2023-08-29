@@ -11,10 +11,10 @@ const LoadData = async (sb: WhStoryBoard) => {
     console.log('开始加载区域框')
     // url参数
     let urlParams = GetRequest();
-    console.log(urlParams)
+    // console.log(urlParams.get("id"))
 
     // @ts-ignore
-    const {items: areaData} = await initAreaByNoApi({"whNo": urlParams['id']})
+    const {items: areaData} = await initAreaByNoApi({"whNo": urlParams.get("id")})
     let areas = []
     if (!areaData || areaData.length == 0) {
         return
@@ -192,7 +192,7 @@ const initData = async (sb: WhStoryBoard, areas: any, wh: any) => {
  */
 const initAreaContainers = (sb: WhStoryBoard, areaName: string, warehouseId: number, whNo: string) => {
     initContainersByAreaApi({
-        warehouseId:warehouseId,
+        warehouseId: warehouseId,
         area: areaName,
         deptId: 1,
         orgId: 1,

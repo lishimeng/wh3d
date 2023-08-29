@@ -26,5 +26,6 @@ export function GetRequest(): Map<string, string> {
             //theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
         }
     }
+    console.log("theRequest", theRequest)
     return theRequest;
 }

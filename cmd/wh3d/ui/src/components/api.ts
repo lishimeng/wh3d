@@ -1,6 +1,6 @@
 import {get} from './request'
 
-const baseURL = 'api'
+const baseURL = '/wh/api'
 
 // 3d数据：初始化托盘信息
 export const initContainersByAreaApi = (p: any) => get(baseURL + "/3d/locationconf/initContainers", p)
@@ -12,9 +12,9 @@ export const initAreaByNoApi = (p: any) => get(baseURL + "/3d/areaconf", p)
 export const initPlatformsApi = (p: any) => get(baseURL + "/3d/platformconf", p)
 
 // 加载地板
-export const initfloorconfApi = (p:any) => get(baseURL + "/3d/floorconf", p)
+export const initfloorconfApi = (p: any) => get(baseURL + "/3d/floorconf", p)
 
-export function GetRequest():Map<string,string> {
+export function GetRequest(): Map<string, string> {
     var url = location.search; //获取url中"?"符后的字串
     var theRequest: Map<string, string> = new Map()
     if (url.indexOf("?") != -1) {

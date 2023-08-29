@@ -1,6 +1,6 @@
 import {get} from './request'
 
-const baseURL = 'api'
+const baseURL = '/api'
 
 // 3d数据：初始化托盘信息
 export const initContainersByAreaApi = (p: any) => get(baseURL + "/3d/locationconf/initContainers", p)
@@ -21,7 +21,7 @@ export function GetRequest():Map<string,string> {
         var str = url.substr(1);
         let strs = str.split("&");
         for (let i = 0; i < strs.length; i++) {
-            let kv = str[i].split("=")
+            let kv = strs[i].split("=")
             theRequest.set(kv[0], kv[1])
             //theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
         }

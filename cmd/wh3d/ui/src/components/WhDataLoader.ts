@@ -14,7 +14,7 @@ const LoadData = async (sb: WhStoryBoard) => {
     console.log(urlParams)
 
     // @ts-ignore
-    const {items: areaData} = await initAreaByNoApi({"whNo": urlParams['id']})
+    const {items: areaData} = await initAreaByNoApi({"whNo": urlParams.get("id")})
     let areas = []
     if (!areaData || areaData.length == 0) {
         return
@@ -26,7 +26,7 @@ const LoadData = async (sb: WhStoryBoard) => {
     await sb.loadAreas(areas)
 
     // @ts-ignore
-    if (urlParams.id == 'A511') {
+    if (urlParams.get("id") == 'A511') {
         // 加载地面路标
         await sb.loadRoads()
     }
@@ -47,7 +47,7 @@ const LoadData = async (sb: WhStoryBoard) => {
     console.log('开始加载容器')
 
     // @ts-ignore
-    await initData(sb, areaData, urlParams.id)
+    await initData(sb, areaData, urlParams.get("id"))
 
 
     // 加载货架

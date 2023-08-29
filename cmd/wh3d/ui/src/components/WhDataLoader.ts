@@ -11,7 +11,7 @@ const LoadData = async (sb: WhStoryBoard) => {
     console.log('开始加载区域框')
     // url参数
     let urlParams = GetRequest();
-    // console.log(urlParams.get("id"))
+    console.log("id============>", urlParams.get("id"))
 
     // @ts-ignore
     const {items: areaData} = await initAreaByNoApi({"whNo": urlParams.get("id")})

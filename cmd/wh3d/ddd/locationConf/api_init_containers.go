@@ -1,6 +1,7 @@
 package locationConf
 
 import (
+	"github.com/beego/beego/v2/client/orm"
 	"github.com/kataras/iris/v12"
 	"github.com/lishimeng/app-starter"
 	"github.com/lishimeng/app-starter/tool"
@@ -26,12 +27,27 @@ func initContainersApi(ctx iris.Context) {
 	warehouseId := ctx.URLParamIntDefault("warehouseId", 0)
 	area := ctx.URLParamDefault("area", "")
 
+	if area == "" || len(area) == 0 {
+		resp.Code = tool.RespCodeError
+		common.ResponseJSON(ctx, ctx)
+		return
+	}
+
 	aoc := app.GetOrm().Context
 	containers := make([]view.InventoryContainerItemInfoView, 0)
+
+	cond := orm.NewCondition()
+	cond1 := cond.
+		And("dimension_area", area).
+		Or("area", area).
+		And("warehouse_id", warehouseId).
+		And("pos_x__gte", 0)
+
 	_, err := aoc.QueryTable(new(view.InventoryContainerItemInfoView)).
-		Filter("dimension_area", area).
-		Filter("warehouse_id", warehouseId).
-		Filter("pos_x__gte", 0).
+		SetCond(cond1).
+		//Filter("dimension_area", area).
+		//Filter("warehouse_id", warehouseId).
+		//Filter("pos_x__gte", 0).
 		OrderBy("-PosX", "-PosY", "-PosZ").
 		All(&containers)
 	if err != nil {

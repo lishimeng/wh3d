@@ -18,7 +18,6 @@ import (
 import _ "github.com/lib/pq"
 
 func main() {
-	orm.Debug = true
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println(err)
@@ -34,6 +33,8 @@ func main() {
 
 func _main() (err error) {
 	configName := "config"
+	// 打开sql日志
+	orm.Debug = true
 
 	application := app.New()
 

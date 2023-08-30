@@ -39,7 +39,7 @@ func initContainersApi(ctx iris.Context) {
 	cond := orm.NewCondition()
 	cond1 := cond.
 		And("dimension_area", area).
-		Or("area", area).
+		//Or("area", area).
 		And("warehouse_id", warehouseId).
 		And("pos_x__gte", 0)
 

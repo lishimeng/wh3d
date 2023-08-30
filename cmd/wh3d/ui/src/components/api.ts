@@ -16,16 +16,16 @@ export const initfloorconfApi = (p: any) => get(baseURL + "/3d/floorconf", p)
 
 export function GetRequest(): Map<string, string> {
     var url = location.search; //获取url中"?"符后的字串
-    console.log('url', url)
+    // console.log('url', url)
 
     url = url ? url : location.hash
-    console.log(url)
+    // console.log(url)
 
     if (url.indexOf("/") != -1) {
         url = url.substr(2)
     }
-    
-    console.log(url)
+
+    // console.log(url)
 
     var theRequest: Map<string, string> = new Map()
     if (url.indexOf("?") != -1) {
@@ -37,6 +37,6 @@ export function GetRequest(): Map<string, string> {
             //theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
         }
     }
-    console.log("theRequest", theRequest)
+    // console.log("theRequest", theRequest)
     return theRequest;
 }

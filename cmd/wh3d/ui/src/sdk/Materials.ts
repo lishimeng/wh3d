@@ -100,12 +100,6 @@ class Materials {
         DefaultLoader.loadGltf(Resources.ModuleTruck, truckUrl, (module) => {
             this.modules.set(Resources.ModuleTruck, module)
         })
-
-        // 加载货架模型
-        DefaultLoader.loadGltf(Resources.MoudleGoodsShelf, "./modules/goodsshelf/scene.gltf", (module) => {
-            console.log("goodsshelf",module)
-            this.modules.set(Resources.MoudleGoodsShelf, module)
-        })
     }
 }
 

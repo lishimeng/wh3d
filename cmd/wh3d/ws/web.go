@@ -112,8 +112,8 @@ func Te(_ context.Context) (err error) {
 		Broadcast(room, string(bytes))
 		time.Sleep(time.Second)
 	}
-	revDatas := make([]view.InventoryContainerItemInfoView, 0)
-	if _, err = app.GetOrm().Context.Raw(`select * from inventory_container_item_info_view
+	revDatas := make([]view.InventoryContainerItemInfoFor3dView, 0)
+	if _, err = app.GetOrm().Context.Raw(`select * from inventory_container_item_info_for3d_view
 	where area = 'PX01'
 	and pos_x >=0
 	order by pos_x ,pos_y ,pos_z`).QueryRows(&revDatas); err != nil {

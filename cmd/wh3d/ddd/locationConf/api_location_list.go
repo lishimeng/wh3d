@@ -58,7 +58,7 @@ func locationConfPageListApi(ctx iris.Context) {
 
 }
 
-func listPage(warehouseNo, locationNo, area string, page *app.Pager) (appInfos []view.InventoryContainerItemInfoView, err error) {
+func listPage(warehouseNo, locationNo, area string, page *app.Pager) (appInfos []view.InventoryContainerItemInfoFor3dView, err error) {
 	//筛选项
 	cond := orm.NewCondition()
 	if len(area) > 0 {
@@ -70,7 +70,7 @@ func listPage(warehouseNo, locationNo, area string, page *app.Pager) (appInfos [
 	if len(locationNo) > 0 {
 		cond = cond.And("locationNo__contains", locationNo)
 	}
-	var qs = app.GetOrm().Context.QueryTable(new(view.InventoryContainerItemInfoView)).SetCond(cond)
+	var qs = app.GetOrm().Context.QueryTable(new(view.InventoryContainerItemInfoFor3dView)).SetCond(cond)
 	sum, err1 := qs.Count()
 
 	if err1 != nil {

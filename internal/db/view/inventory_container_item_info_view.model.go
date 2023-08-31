@@ -2,7 +2,7 @@ package view
 
 import "github.com/lishimeng/wh3d/internal/db/model"
 
-type InventoryContainerItemInfoView struct {
+type InventoryContainerItemInfoFor3dView struct {
 	ContainerId   int    `orm:"column(container_id);null"`
 	ContainerNo   string `orm:"column(container_no);null"`   // 托盘号
 	WarehouseId   int    `orm:"column(warehouse_id);null"`   // 仓库ID
@@ -39,7 +39,7 @@ type InventoryContainerItemInfoView struct {
 }
 
 // TableUnique 多字段唯一键
-func (li *InventoryContainerItemInfoView) TableUnique() [][]string {
+func (li *InventoryContainerItemInfoFor3dView) TableUnique() [][]string {
 	return [][]string{
 		{"ContainerId", "SkuId", "BatchNo", "ItemNo"},
 	}

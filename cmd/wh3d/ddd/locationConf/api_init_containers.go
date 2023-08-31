@@ -34,7 +34,7 @@ func initContainersApi(ctx iris.Context) {
 	}
 
 	aoc := app.GetOrm().Context
-	containers := make([]view.InventoryContainerItemInfoView, 0)
+	containers := make([]view.InventoryContainerItemInfoFor3dView, 0)
 
 	cond := orm.NewCondition()
 	cond1 := cond.
@@ -43,7 +43,7 @@ func initContainersApi(ctx iris.Context) {
 		And("warehouse_id", warehouseId).
 		And("pos_x__gte", 0)
 
-	_, err := aoc.QueryTable(new(view.InventoryContainerItemInfoView)).
+	_, err := aoc.QueryTable(new(view.InventoryContainerItemInfoFor3dView)).
 		SetCond(cond1).
 		//Filter("dimension_area", area).
 		//Filter("warehouse_id", warehouseId).

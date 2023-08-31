@@ -123,7 +123,7 @@ func initLocationForA511(ctx iris.Context) {
 	SPLIT_PART( dimensions, '-', 3 ) AS z,
 	SPLIT_PART( dimensions, '-', 2 ) AS y 
 FROM
-	inventory_container_item_info_view 
+	inventory_container_item_info_for3d_view 
 WHERE
 	warehouse_id = 1 
 	AND dimensions IS NOT NULL 

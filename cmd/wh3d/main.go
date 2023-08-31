@@ -62,9 +62,9 @@ func _main() (err error) {
 			EnableWeb(etc.Config.Web.Listen, setup.Route).
 			EnableDatabase(dbConfig.Build(),
 				db.RegisterTables()...).
-			//EnableStaticWeb(func() http.FileSystem {
-			//	return http.FS(static.Static)
-			//}).
+			EnableStaticWeb(func() http.FileSystem {
+				return http.FS(static.Static)
+			}).
 			ComponentAfter(setup.Setup)
 		return err
 	}, func(s string) {

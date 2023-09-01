@@ -185,8 +185,8 @@ func initLocationForA610(ctx iris.Context) {
 	var resp respLocationConfJson
 	resp.Code = tool.RespCodeSuccess
 
+
 	warehouseId := ctx.URLParamIntDefault("warehouseId", 0)
-	//area := ctx.URLParamDefault("area", "")
 
 	if warehouseId == 0 {
 		resp.Code = common.RespCodeServerError

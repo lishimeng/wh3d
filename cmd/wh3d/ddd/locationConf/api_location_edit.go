@@ -92,16 +92,17 @@ func calculatePositionYZX(conf *model.LocationConf, reqJson *locationConfJson, a
 }
 
 type location struct {
-	WarehouseId int
-	WarehouseNo string
-	LocationId  int
-	LocationNo  string
-	Dimensions  string
-	Area        string
-	Group       int
-	X           int
-	Z           int
-	Y           int
+	WarehouseId   int
+	WarehouseNo   string
+	LocationId    int
+	LocationNo    string
+	Dimensions    string
+	DimensionArea string
+	Area          string
+	Group         int
+	X             int
+	Z             int
+	Y             int
 }
 
 func initLocationForA511(ctx iris.Context) {
@@ -125,6 +126,7 @@ func initLocationForA511(ctx iris.Context) {
 	location_id,
 	location_no,
 	dimensions,
+	dimension_area,
 	area,
 	SPLIT_PART( dimensions, '-', 1 ) AS x,
 	SPLIT_PART( dimensions, '-', 3 ) AS z,
@@ -143,7 +145,7 @@ ORDER BY
 	for _, item := range locations {
 		// 创建每一个库位配置，并计算对决定位
 		conf := model.AreaConf{}
-		conf.No = item.Area
+		conf.No = item.DimensionArea
 		conf.WhId = item.WarehouseId
 		err := aoc.Read(&conf, "No", "WhId")
 		if err != nil {
@@ -160,7 +162,7 @@ ORDER BY
 			LocationId:  item.LocationId,
 			WarehouseId: item.WarehouseId,
 			AreaConfId:  item.WarehouseId,
-			Area:        item.Area,
+			Area:        item.DimensionArea,
 			RelX:        item.X,
 			RelZ:        item.Z,
 			RelY:        item.Y,
@@ -183,8 +185,8 @@ func initLocationForA610(ctx iris.Context) {
 	resp.Code = tool.RespCodeSuccess
 
 	area := ctx.URLParamDefault("area", "")
-	tempZ := ctx.URLParamIntDefault("tempZ", 0)
-	tempX := ctx.URLParamIntDefault("tempX", 0)
+	tempZ := ctx.URLParamIntDefault("tempZ", 0) // Y轴
+	tempX := ctx.URLParamIntDefault("tempX", 0) // X轴
 
 	locations := make([]location, 0)
 	aoc := app.GetOrm().Context

@@ -35,7 +35,7 @@ export class Container extends CubeImpl {
         mesh.layers.set(Layers.Goods)
 
         // let outerMat = DefaultMaterials.get(Resources.Goods)
-        let outerMat = new MeshBasicMaterial({transparent: true, opacity: 0.4})
+        let outerMat = new MeshBasicMaterial({transparent: true, opacity: 0.3})
 
         // let outerMat = DefaultMaterials.get(Resources.Area)
         let outerMesh = new Mesh(outerGeo, outerMat)

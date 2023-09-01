@@ -5,8 +5,10 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/lishimeng/app-starter"
 	"github.com/lishimeng/app-starter/tool"
+	"github.com/lishimeng/go-log"
 	"github.com/lishimeng/wh3d/cmd/wh3d/ddd/common"
 	"github.com/lishimeng/wh3d/internal/db/view"
+	"strconv"
 )
 
 type position struct {
@@ -71,22 +73,23 @@ func initContainersApi(ctx iris.Context) {
 		resp.Data = append(resp.Data, c)
 	}
 
-	//maps := make([]position, 0)
-	//
-	//_, err := aoc.Raw(`select pos_x as x ,pos_z as z,pos_y as y from location_conf t1 where warehouse_id = 4 AND area = 'H'`).QueryRows(&maps)
-	//if err != nil {
-	//	return
-	//}
-	//
-	//for index, item := range maps {
-	//	formatInt := strconv.FormatInt(int64(index), 10)
-	//	c := containerInfo{
-	//		Name:     formatInt,
-	//		Location: area,
-	//		Pos:      item,
-	//	}
-	//	resp.Data = append(resp.Data, c)
-	//}
+	maps := make([]position, 0)
+
+	_, err = aoc.Raw(`select pos_x as x ,pos_z as z,pos_y as y from location_conf t1 where warehouse_id = 4 AND area = ? `, area).QueryRows(&maps)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	for index, item := range maps {
+		formatInt := strconv.FormatInt(int64(index), 10)
+		c := containerInfo{
+			Name:     formatInt,
+			Location: area,
+			Pos:      item,
+		}
+		resp.Data = append(resp.Data, c)
+	}
 
 	//log.Info(maps)
 	resp.Code = common.RespCodeSuccess

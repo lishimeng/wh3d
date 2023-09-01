@@ -26,7 +26,7 @@ export default defineConfig({
                 // rewrite: (path) => path.replace(/^\/main\/3d/, '/api'), // 本地环境
                 rewrite: (path: string) => {
                     let path2 = path.replace(/^\/wh/, '')
-                    console.log('path=========>', path2)
+                    // console.log('path=========>', path2)
                     return path2
                 }
             },

@@ -12,7 +12,6 @@ const LoadData = async (sb: WhStoryBoard) => {
     // url参数
     let urlParams = GetRequest();
 
-    // @ts-ignore
     const {items: areaData} = await initAreaByNoApi({"whNo": urlParams.get("id")})
     let areas = []
     if (!areaData || areaData.length == 0) {
@@ -22,12 +21,13 @@ const LoadData = async (sb: WhStoryBoard) => {
         let data = areaData[i]
         areas.push(new AreaInfo(data.name).Pos(data.pos.x, data.pos.z).Size(data.size.w, data.size.h))
     }
-    await sb.loadAreas(areas)
 
-    // @ts-ignore
     if (urlParams.get("id") == 'A511') {
         // 加载地面路标
         await sb.loadRoads()
+        await sb.loadAreas(areas)
+    } else if (urlParams.get("id") == "A610") {
+        await sb.loadAreas(areas, "17px Microsoft YaHei")
     }
 
     console.log('开始加载发货站台')

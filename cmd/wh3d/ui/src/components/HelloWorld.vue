@@ -6,7 +6,7 @@ import {DefaultMaterials} from '../sdk/Materials';
 import WhStoryBoard from './WhStoryBoard';
 import LoadData from './WhDataLoader';
 
-import * as echarts from 'echarts'
+// import * as echarts from 'echarts'
 
 const {proxy} = getCurrentInstance() as any;
 

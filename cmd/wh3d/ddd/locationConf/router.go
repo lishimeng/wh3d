@@ -19,8 +19,8 @@ func Router(p iris.Party) {
 	p.Post("/update/location/conf", locationConfEdit)
 
 	// 初始化配置库 A511
-	p.Get("/initlocation", initLocationForA511)
+	//p.Get("/initlocation", initLocationForA511)
 
 	// 初始化配置库 A610
-	p.Get("/initlocation/a610", initLocationForA610)
+	//p.Get("/initlocation/a610", initLocationForA610)
 }

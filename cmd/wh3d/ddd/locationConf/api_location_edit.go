@@ -6,6 +6,7 @@ import (
 	"github.com/lishimeng/app-starter/persistence"
 	"github.com/lishimeng/app-starter/tool"
 	"github.com/lishimeng/go-log"
+	"github.com/lishimeng/wh3d/cmd/wh3d/ddd/common"
 	"github.com/lishimeng/wh3d/internal/db/model"
 )
 
@@ -184,14 +185,19 @@ func initLocationForA610(ctx iris.Context) {
 	var resp respLocationConfJson
 	resp.Code = tool.RespCodeSuccess
 
-	area := ctx.URLParamDefault("area", "")
-	tempZ := ctx.URLParamIntDefault("tempZ", 0) // Y轴
-	tempX := ctx.URLParamIntDefault("tempX", 0) // X轴
+	warehouseId := ctx.URLParamIntDefault("warehouseId", 0)
+	//area := ctx.URLParamDefault("area", "")
 
+	if warehouseId == 0 {
+		resp.Code = common.RespCodeServerError
+		tool.ResponseJSON(ctx, resp)
+		return
+	}
 	locations := make([]location, 0)
 	aoc := app.GetOrm().Context
 
-	_, err := aoc.Raw(`SELECT
+	_, err := aoc.Raw(`
+SELECT
 	warehouse_id,
 	warehouse_no,
 	ID AS location_id,
@@ -199,12 +205,14 @@ func initLocationForA610(ctx iris.Context) {
 	description AS area,
 	"order" AS x,
 	layer AS y,
-	"group"
+	"group" 
 FROM
 	location_info 
 WHERE
-	warehouse_id = 4 
-	AND description = ?`, area).QueryRows(&locations)
+	warehouse_id = ?
+ORDER BY
+	"order",
+	layer`, warehouseId).QueryRows(&locations)
 	if err != nil {
 		log.Info(err)
 	}
@@ -212,7 +220,7 @@ WHERE
 	for _, item := range locations {
 		// 创建每一个库位配置，并计算定位
 		conf := model.AreaConf{}
-		conf.No = "H"
+		conf.No = item.Area
 		conf.WhId = item.WarehouseId
 		err := aoc.Read(&conf, "No", "WhId")
 		if err != nil {
@@ -223,19 +231,23 @@ WHERE
 		// 计算绝对坐标
 		//x := item.X + 20 + conf.PosX
 
-		x := item.X + tempX + conf.PosX
+		//x := item.X + tempX + conf.PosX
+		//y := item.Y + conf.PosY
+		//z := tempZ + conf.PosZ
+
+		x := item.X + conf.PosX
 		y := item.Y + conf.PosY
-		z := tempZ + conf.PosZ
+		z := item.Z + conf.PosZ
 
 		locationConf := model.LocationConf{
 			LocationId:  item.LocationId,
 			WarehouseId: item.WarehouseId,
 			AreaConfId:  item.WarehouseId,
-			Area:        "H",
-			RelX:        item.X,
-			RelZ:        tempZ,
+			Area:        conf.No,
+			RelX:        item.X - 1,
+			RelZ:        item.Z,
 			RelY:        item.Y,
-			PosX:        x,
+			PosX:        x - 1,
 			PosZ:        z,
 			PosY:        y,
 		}

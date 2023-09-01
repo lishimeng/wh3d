@@ -108,6 +108,13 @@ func initLocationForA511(ctx iris.Context) {
 	var resp respLocationConfJson
 	resp.Code = tool.RespCodeSuccess
 
+	warehouseId := ctx.URLParamIntDefault("warehouseId", 0)
+
+	if warehouseId == 0 {
+		resp.Code = tool.RespCodeError
+		tool.ResponseJSON(ctx, resp)
+		return
+	}
 	locations := make([]location, 0)
 	aoc := app.GetOrm().Context
 
@@ -125,10 +132,10 @@ func initLocationForA511(ctx iris.Context) {
 FROM
 	inventory_container_item_info_for3d_view 
 WHERE
-	warehouse_id = 1 
+	warehouse_id = ?
 	AND dimensions IS NOT NULL 
 ORDER BY
-	"group"`).QueryRows(&locations)
+	"group"`, warehouseId).QueryRows(&locations)
 	if err != nil {
 		log.Info(err)
 	}

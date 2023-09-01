@@ -1,7 +1,7 @@
 import { GUI } from "dat.gui"
 import { Scene, PerspectiveCamera, Mesh, AmbientLight, AxesHelper, WebGLRenderer, Color, HemisphereLight, HemisphereLightHelper, GridHelper, CameraHelper, Vector3, Vector2, Raycaster } from "three"
 
-import { MapControls, OrbitControls } from "three/examples/jsm/controls/OrbitControls" 
+import { MapControls, OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 import Stats from 'three/examples/jsm/libs/stats.module'
 import Config from "./Config"
@@ -45,8 +45,8 @@ export class WorldImpl implements World {
     init(): void {
 
         this.posList.push(
-            new Vector3(0, 200, 0), 
-            new Vector3(100, 200, 0), 
+            new Vector3(0, 200, 0),
+            new Vector3(100, 200, 0),
             new Vector3(0, 100, 100),
             new Vector3(-100, 200, 0),
             new Vector3(50, 25, 0),
@@ -86,7 +86,7 @@ export class WorldImpl implements World {
         this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	    this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         DefaultEventManager.updtePointer(this.pointer.x, this.pointer.y)
-        
+
         DefaultEventManager.update(this.scene, this.camera)
     }
 
@@ -102,16 +102,16 @@ export class WorldImpl implements World {
         let tiles = Config.Global.TilesW
 
         this.gridHelper = new GridHelper(
-            size, 
+            size,
             tiles
         )
         this.gridHelper.layers.set(Layers.Helper)
         this.scene.add(this.gridHelper)
-        
+
     }
 
     initLight() {
-        var ambient = new AmbientLight(0xffffff, 1) //AmbientLight,影响整个场景的光源 
+        var ambient = new AmbientLight(0xffffff, 1) //AmbientLight,影响整个场景的光源
         ambient.layers.set(Layers.Light)
         this.scene.add(ambient)
     }
@@ -163,14 +163,14 @@ export class WorldImpl implements World {
         let gui = new GUI()
 
         let cf = gui.addFolder('Camera')
-        
+
         cf.add(Config.Camare, 'Control')
         cf.add(Config.Camare, 'Lock').onChange(() => {
             if (Config.Camare.Lock) {
                 this.moveCamera(new Vector3(0, 200, 0))
             }
         })
-        
+
         cf.open()
 
         let layer = gui.addFolder('Layer')
@@ -198,7 +198,7 @@ export class WorldImpl implements World {
         this.control?.update()
 
         DefaultLayerManager.update()
-        
+
         this.stats.update()
         this.renderer?.render(this.scene, this.camera);
 

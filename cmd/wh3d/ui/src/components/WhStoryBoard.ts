@@ -1,15 +1,4 @@
-import {
-    BoxGeometry,
-    Group,
-    Mesh,
-    MeshBasicMaterial,
-    MeshLambertMaterial,
-    PlaneGeometry,
-    RepeatWrapping,
-    Scene,
-    Vector2,
-    Vector3
-} from "three"
+import {Group, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, Scene, Vector2, Vector3} from "three"
 import {Area} from "../sdk/models/Area"
 import {Bin} from "../sdk/models/Bin"
 import {Container} from "../sdk/models/Container"
@@ -144,14 +133,14 @@ export default class WhStoryBoard extends StoryBoard {
         this.add(b.mesh)
     }
 
-    async loadAreas(areas: AreaInfo[]): Promise<void> {
+    async loadAreas(areas: AreaInfo[], font = "45px Microsoft YaHei"): Promise<void> {
 
         for (let i = 0; i < areas.length; i++) {
             let area = areas[i]
             area.Build()
             // 存储
             DefaultStorage.areaLocMap.set(area.name, area)
-            this.loadArea(area.name, area.pos, area.size)
+            this.loadArea(area.name, font, area.pos, area.size)
         }
     }
 
@@ -350,9 +339,9 @@ export default class WhStoryBoard extends StoryBoard {
         })
     }
 
-    loadArea(name: string, pos: Vector3, size: Vector3) {
+    loadArea(name: string, font: string, pos: Vector3, size: Vector3) {
 
-        let b = new Area(name, size.x, size.z)
+        let b = new Area(name,font, size.x, size.z)
         b.mesh.position.set(pos.x, 1, pos.z)
         this.add(b.mesh)
 

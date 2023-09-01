@@ -73,8 +73,9 @@ func initContainersApi(ctx iris.Context) {
 
 	//maps := make([]position, 0)
 	//
-	//_, err := aoc.Raw(`select pos_x as x ,pos_z as z,pos_y as y from location_conf t1 where warehouse_id = 4 AND area = 'H'`).QueryRows(&maps)
+	//_, err = aoc.Raw(`select pos_x as x ,pos_z as z,pos_y as y from location_conf t1 where warehouse_id = 4 AND area = ? `, area).QueryRows(&maps)
 	//if err != nil {
+	//	log.Error(err)
 	//	return
 	//}
 	//

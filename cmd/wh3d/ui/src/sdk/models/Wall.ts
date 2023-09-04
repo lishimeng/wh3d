@@ -22,7 +22,7 @@ export class Wall extends CubeImpl {
         let mesh: Mesh = new Mesh(geo, mat)
         // 透明层
         // mesh.material = new MeshBasicMaterial({transparent: true, opacity: 0.5})
-        mesh.layers.set(Layers.Environment)
+        // mesh.layers.set(Layers.Environment)
         super(mesh)
     }
 }

@@ -1,21 +1,36 @@
-import { GUI } from "dat.gui"
-import { Scene, PerspectiveCamera, Mesh, AmbientLight, AxesHelper, WebGLRenderer, Color, HemisphereLight, HemisphereLightHelper, GridHelper, CameraHelper, Vector3, Vector2, Raycaster } from "three"
+import {GUI} from "dat.gui"
+import {
+    AmbientLight,
+    AxesHelper,
+    CameraHelper,
+    Color,
+    GridHelper,
+    HemisphereLightHelper,
+    Mesh,
+    PerspectiveCamera,
+    Raycaster,
+    Scene,
+    Vector2,
+    Vector3,
+    WebGLRenderer
+} from "three"
 
-import { MapControls, OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import {MapControls} from "three/examples/jsm/controls/OrbitControls"
 
 import Stats from 'three/examples/jsm/libs/stats.module'
 import Config from "./Config"
 
-import { Cube, CubeImpl } from "./Cube"
-import { DefaultLayerManager, Layers } from "./Layers"
-import { DefaultStorage } from "./Storage"
-import { DefaultEventManager } from "./Event"
+import {Cube, CubeImpl} from "./Cube"
+import {DefaultLayerManager, Layers} from "./Layers"
+import {DefaultEventManager} from "./Event"
 
 
 export interface World {
 
     start(): void
+
     add(c: Cube): void
+
     createCube(m: Mesh): Cube
 }
 
@@ -51,7 +66,7 @@ export class WorldImpl implements World {
             new Vector3(-100, 200, 0),
             new Vector3(50, 25, 0),
             new Vector3(0, 100, -100)
-            )
+        )
 
         this.initScene()
         this.initCamera()
@@ -61,7 +76,9 @@ export class WorldImpl implements World {
         this.initControls()
         this.initGui()
         document.addEventListener('resize', this.onWindowResize, false)
-        document.addEventListener('pointerdown', (event)=> {this.onMouseClick(event)}, false)
+        document.addEventListener('pointerdown', (event) => {
+            this.onMouseClick(event)
+        }, false)
         let i = 0;
         setInterval(() => {
             i = (i + 1) % this.posList.length
@@ -80,11 +97,11 @@ export class WorldImpl implements World {
         this.camera.updateProjectionMatrix();
     }
 
-    onMouseClick(event: any): void{
+    onMouseClick(event: any): void {
 
         console.log(event.clientX + ":" + event.clientY)
-        this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	    this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
         DefaultEventManager.updtePointer(this.pointer.x, this.pointer.y)
 
         DefaultEventManager.update(this.scene, this.camera)
@@ -94,12 +111,15 @@ export class WorldImpl implements World {
         this.scene = new Scene()
         this.scene.background = new Color(0x000000)
         // this.scene.fog = new Fog( this.scene.background, 1000, 4000 )
-        let axes = new AxesHelper(800)
+        let axes = new AxesHelper(1000)
+        this.scene.layers.set(Layers.Helper)
+
         axes.layers.set(Layers.Helper)
         this.scene.add(axes)
 
-        let size = Config.Global.TilesW * Config.Global.UnitLegth
-        let tiles = Config.Global.TilesW
+        let s = Config.Global.TilesW + 16
+        let size = s * Config.Global.UnitLegth
+        let tiles = s
 
         this.gridHelper = new GridHelper(
             size,
@@ -107,6 +127,8 @@ export class WorldImpl implements World {
         )
         this.gridHelper.layers.set(Layers.Helper)
         this.scene.add(this.gridHelper)
+
+        DefaultLayerManager.scene = this.scene
 
     }
 
@@ -124,7 +146,7 @@ export class WorldImpl implements World {
             Config.Camare.Far
         )
 
-        this.camera.layers.set(Layers.Environment)
+        // this.camera.layers.set(Layers.Environment)
         this.scene.add(this.camera)
         this.moveCamera(new Vector3(0, 200, 0))
         this.camera.lookAt(0, 0, 0)
@@ -137,7 +159,7 @@ export class WorldImpl implements World {
     }
 
     initRender(): void {
-        this.renderer = new WebGLRenderer({ antialias: true })
+        this.renderer = new WebGLRenderer({antialias: true})
         this.renderer.setClearColor(new Color(0xeeeeee))
         this.renderer.setSize(window.innerWidth, window.innerHeight)
         document.body.appendChild(this.renderer.domElement);
@@ -158,7 +180,7 @@ export class WorldImpl implements World {
         this.control.maxPolarAngle = Math.PI / 2;
     }
 
-    initGui():void {
+    initGui(): void {
 
         let gui = new GUI()
 
@@ -209,4 +231,5 @@ export class WorldImpl implements World {
         this.animate()
     }
 }
+
 export default World

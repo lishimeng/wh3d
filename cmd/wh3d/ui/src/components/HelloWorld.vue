@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import {getCurrentInstance, nextTick, onMounted} from "vue";
+import {getCurrentInstance, onMounted} from "vue";
 import {WorldImpl} from '../sdk/World'
 import {DefaultLoadingManager} from 'three';
 import {DefaultMaterials} from '../sdk/Materials';
 import WhStoryBoard from './WhStoryBoard';
 import LoadData from './WhDataLoader';
-
-// import * as echarts from 'echarts'
+import {GetRequest, initfloorconfApi} from "./api";
+import Config from "../sdk/Config";
 
 const {proxy} = getCurrentInstance() as any;
 
@@ -44,8 +44,26 @@ const initWorld = () => {
 
 onMounted(() => {
   DefaultMaterials.init()
-  // setMask()
+
+  initHelperGrade()
 })
+
+// 根据当前仓库初始化helpler网格的w、h
+const initHelperGrade = async () => {
+  // url参数
+  let urlParams = GetRequest();
+  const {items: items, code: code} = await initfloorconfApi({
+    whNo: urlParams.get("id")
+  })
+
+  let areas = []
+  if (!items || items.length == 0) {
+    return
+  }
+  console.log("items", items)
+  Config.Global.TilesW = items[0].width
+  Config.Global.TilesH = items[0].height
+}
 
 
 </script>

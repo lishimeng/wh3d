@@ -1,4 +1,4 @@
-import { Camera } from "three"
+import {Camera, Color, Scene} from "three"
 import Config from "./Config"
 
 export enum Layers {
@@ -13,8 +13,16 @@ export enum Layers {
 class LayerManager {
     config = Config
     camera!: Camera
+    scene!: Scene
 
     update() : void {
+        // console.log(new Date())
+        // console.log(Config.Layer.Environment)
+        // console.log(Config.Layer.Facility)
+        // console.log(Config.Layer.Light)
+        // console.log(Config.Layer.Goods)
+        // console.log(Config.Layer.Helper)
+        //
         if (!this.camera) {
             return
         }
@@ -22,6 +30,7 @@ class LayerManager {
             this.camera.layers.enable(Layers.Environment)
         } else {
             this.camera.layers.disable(Layers.Environment)
+            this.scene.background = new Color(0x262838)
         }
 
         if (Config.Layer.Facility) {

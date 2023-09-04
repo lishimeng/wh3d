@@ -13,7 +13,7 @@ export class Label extends CubeImpl {
 
     constructor(name: string, size: number) {
         let font = DefaultLoader.getFont(Resources.TTFKenpixel)
-        
+
         let geo = new TextGeometry(name, {
             font: font,
             size: size,
@@ -21,11 +21,11 @@ export class Label extends CubeImpl {
         })
         geo.computeBoundingBox()
         let mesh: Mesh = new Mesh(geo, mat)
-        mesh.layers.set(Layers.Environment)
+        // mesh.layers.set(Layers.Environment)
         super(mesh)
     }
 
     init(): void {
-        
+
     }
 }

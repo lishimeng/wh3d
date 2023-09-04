@@ -17,15 +17,12 @@ export class Area extends CubeImpl {
         this.name = name
         // let mat = DefaultMaterials.get(Resources.Area)
 
-        // let outerGeo = new BoxGeometry(width, 0.1, height)
-        // outerGeo
-
-
         let geo = new BoxGeometry(width, 0.1, height)
-        let mat = new MeshStandardMaterial({color: new Color(0xcfd2d6)})
+        let mat = new MeshStandardMaterial({color: new Color(0x234d75), transparent: true, opacity: 0.5})
         let mesh: Mesh = new Mesh(geo, mat)
 
         const line = new BoxHelper(mesh, 0xffffff);
+        line.layers.set(Layers.Facility)
 
         group.add(line)
         group.add(mesh)

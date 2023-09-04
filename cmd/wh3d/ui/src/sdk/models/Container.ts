@@ -48,6 +48,8 @@ export class Container extends CubeImpl {
 
         // 轮廓线
         const box: any = new BoxHelper(mesh, '#000000');  //object 模型
+        box.layers.set(Layers.Goods)
+
         group.add(box);
         group.add(mesh)
         group.add(outerMesh)

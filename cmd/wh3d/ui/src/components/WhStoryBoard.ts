@@ -11,7 +11,7 @@ import {AreaInfo, ContainerInfo, GoodsShelfInfo, StationInfo} from "../sdk/Data"
 import {Wall} from "../sdk/models/Wall"
 import {Station} from "../sdk/models/Station"
 import StoryBoard from "../sdk/StoryBoard"
-
+import { Layers } from "../sdk/Layers";
 import {GetRequest, initfloorconfApi} from './api'
 import {GoodShelf} from "../sdk/models/GoodShelf";
 
@@ -64,6 +64,7 @@ export default class WhStoryBoard extends StoryBoard {
         let p2 = Util.transPos(new Vector3(0, 0, 0), new Vector3(this.floorW, 0, this.floorH))
         let ground3 = new Ground(p2, new Vector2(s2.x, s2.z), new MeshBasicMaterial({transparent: true, opacity: 0.5}))
         ground3.mesh.position.y = 20
+        // ground3.mesh.layers.set(Layers.Environment)
         // group2.add(ground3.mesh)
 
 
@@ -72,14 +73,15 @@ export default class WhStoryBoard extends StoryBoard {
     }
 
 
-    loadSky(): void {
+    loadSky():  Promise<void> {
         // let sky = new Sky()
         // this.add(sky.mesh)
         let bg = DefaultLoader.getTexture(Resources.SkyScene)
         this.scene.background = bg
+        // this.scene.layers.set(Layers.Environment)
     }
 
-    loadWalls() {
+    loadWalls(): Promise<void> {
         console.log('开始加载墙面:4个面', this.floorW, this.floorH)
 
         // let width = Config.Global.TilesW
@@ -341,7 +343,7 @@ export default class WhStoryBoard extends StoryBoard {
 
     loadArea(name: string, font: string, pos: Vector3, size: Vector3) {
 
-        let b = new Area(name,font, size.x, size.z)
+        let b = new Area(name, font, size.x, size.z)
         b.mesh.position.set(pos.x, 1, pos.z)
         this.add(b.mesh)
 
@@ -369,7 +371,6 @@ export default class WhStoryBoard extends StoryBoard {
         let p = c.tileRelative
         switch (p.y) {
             case 0: // 一层
-
                 break
             case 1: // 二层
                 // let mat1 = new MeshBasicMaterial({color: "green"})
@@ -384,8 +385,9 @@ export default class WhStoryBoard extends StoryBoard {
                 break
         }
         let mesh = container.mesh
+        // c.pos.y - 3 设置 托盘紧挨着地板
 
-        mesh.position.set(c.pos.x, c.pos.y, c.pos.z)
+        mesh.position.set(c.pos.x, c.pos.y - 3, c.pos.z)
         mesh.userData["c_name"] = c.name
         this.add(mesh)
         DefaultStorage.containers.push(mesh)
@@ -429,7 +431,7 @@ export default class WhStoryBoard extends StoryBoard {
         // DefaultStorage.stationMesh.set(s.name, b)
     }
 
-    loadOthers() {
+    loadOthers(): Promise<void> {
     }
 
     removeContainer(name: string) {

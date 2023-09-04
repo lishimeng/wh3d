@@ -1,11 +1,11 @@
-import { Color, Vector3 } from "three"
+import {Color, Vector3} from "three"
 
 //  地图以瓦片方格编号，每个单位方格: Config.Camare.Far, Config.Camare.Far
 
 const UnitLegth = 4
 
-const TilesW = 40
-const TilesH = 80
+var TilesW = 80
+var TilesH = 40
 
 const GlobalConfig = {
     UnitLegth: UnitLegth,
@@ -30,7 +30,7 @@ const LayerConfig = {
     Light: true,
     Facility: true,
     Goods: true,
-    Helper: false
+    Helper: true
 }
 
 const HelperConfig = {
